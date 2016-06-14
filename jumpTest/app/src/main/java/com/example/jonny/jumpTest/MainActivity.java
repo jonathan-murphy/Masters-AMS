@@ -1,6 +1,7 @@
 package com.example.jonny.jumpTest;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -8,11 +9,14 @@ import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.os.Environment;
+import android.os.Vibrator;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -74,9 +78,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     int i = 0;
     int timerSync = 0;
 
+    boolean testComplete = false;
+
     private Timer timer  = new Timer();;
     private TimerTask timerTask ;
     //private TransferUtility transferUtility;
+    View.OnClickListener mOnClickListener;
+    Vibrator v;
 
     AmazonS3 s3;
     TransferUtility transferUtility;
@@ -88,6 +96,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         credentialsProvider();
         setTransferUtility();
+
+        v = (Vibrator)getSystemService(Context.VIBRATOR_SERVICE);
 
         samples = recordTime * sampleRate; // calculating neccesary number of samples to record
 
@@ -105,15 +115,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         final Button startButton = (Button) findViewById(R.id.start);
         startButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                startButton.setVisibility(View.GONE);
+                mToneGenerator.startTone(ToneGenerator.TONE_PROP_PROMPT);
                 initializeTimerTask();
                 timer.schedule(timerTask, beepDelay, 1000);
-            }
-        });
-
-        final Button saveButton = (Button) findViewById(R.id.saveCSV);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                save();
             }
         });
     }
@@ -146,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void run() {
                 if (timerSync < 1){
                     mToneGenerator.startTone(ToneGenerator.TONE_PROP_PROMPT);
+                    v.vibrate(100);
                 }
                 else if (timerSync == 1){
                     mToneGenerator.startTone(ToneGenerator.TONE_PROP_PROMPT);
@@ -189,12 +195,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         }
 
         if (i < samples + 1 && save == true) {
-            findPoints();
+            //findPoints();
             mylist.add(new String[] {Long.toString(time),Float.toString(rawX),Float.toString(rawY),Float.toString(rawZ)});
             i = i+1;
         }
 
-        prevGForce = gForce;
+        if (i == samples && testComplete == false) {
+            v.vibrate(250);
+            Snackbar snack = Snackbar.make(findViewById(android.R.id.content), "Test complete", Snackbar.LENGTH_INDEFINITE)
+                    .setAction("SAVE", new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            save();
+                        }
+                    });
+            snack.show();
+            testComplete = true;
+        }
     }
 
     @Override
@@ -223,7 +240,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         if (difference > ecThreshold && getStart == true)
         {
-            Toast.makeText(getApplicationContext(),"Eccentric Phase",Toast.LENGTH_SHORT).show();
             startTime = 10;
             getStart = false;
         }
