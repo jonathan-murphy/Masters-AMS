@@ -15,7 +15,8 @@
         android:text="SAVE"
         android:id="@+id/saveCSV"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:onClick="setFileToUpload" />
 
     <TextView
         android:layout_width="wrap_content"

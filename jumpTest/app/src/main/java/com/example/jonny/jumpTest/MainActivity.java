@@ -16,23 +16,40 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amazonaws.auth.CognitoCachingCredentialsProvider;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferListener;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferObserver;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferState;
+import com.amazonaws.mobileconnectors.s3.transferutility.TransferUtility;
+import com.amazonaws.regions.Region;
+import com.amazonaws.regions.Regions;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
 import com.example.jonny.csvtest.R;
 import com.opencsv.CSVWriter;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity implements SensorEventListener {
 
+    private static AmazonS3Client sS3Client;
+    private static CognitoCachingCredentialsProvider sCredProvider;
+    private static TransferUtility sTransferUtility;
+
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
     private ToneGenerator mToneGenerator;
+
+    String DateToStr;
 
     int concStart = 0;
     float gMin = 100;
@@ -59,11 +76,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     private Timer timer  = new Timer();;
     private TimerTask timerTask ;
+    //private TransferUtility transferUtility;
+
+    AmazonS3 s3;
+    TransferUtility transferUtility;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        credentialsProvider();
+        setTransferUtility();
 
         samples = recordTime * sampleRate; // calculating neccesary number of samples to record
 
@@ -93,6 +117,28 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             }
         });
     }
+
+    public void credentialsProvider(){
+
+        // Initialize the Amazon Cognito credentials provider
+        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
+                getApplicationContext(),
+                "us-east-1:c161571a-167b-4647-bd16-263937eec637", // Identity Pool ID
+                Regions.US_EAST_1 // Region
+        );
+
+        setAmazonS3Client(credentialsProvider);
+    }
+
+    public void setAmazonS3Client(CognitoCachingCredentialsProvider credentialsProvider){
+        s3 = new AmazonS3Client(credentialsProvider);
+        s3.setRegion(Region.getRegion(Regions.US_EAST_1));
+    }
+
+    public void setTransferUtility(){
+        transferUtility = new TransferUtility(s3, getApplicationContext());
+    }
+
 
     public void initializeTimerTask() {
 
@@ -134,16 +180,17 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         String alphaVal = "Alpha = " + ALPHA;
 
         if (i == 0) {
-            mylist.add(new String[]{alphaVal});
-            mylist.add(new String[]{"Unfiltered", "Filtered"});
+            Date curDate = new Date();
+            SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy hh:mm:ss a");
+            DateToStr = format.format(curDate);
+            mylist.add(new String[]{DateToStr});
+            mylist.add(new String[]{"Time","X","Y","Z"});
             i = i+1;
         }
 
         if (i < samples + 1 && save == true) {
             findPoints();
-            //mylist.add(new String[] {Long.toString(startTime),Float.toString(rawX),Float.toString(rawY),Float.toString(rawZ),Float.toString(filterX),Float.toString(filterY),Float.toString(filterZ)});
-            //mylist.add(new String[] {Float.toString(gForce),Float.toString(startTime),Float.toString(minTime),Float.toString(maxTime)});
-            mylist.add(new String[] {Float.toString(gForce),Float.toString(gForceRaw)});
+            mylist.add(new String[] {Long.toString(time),Float.toString(rawX),Float.toString(rawY),Float.toString(rawZ)});
             i = i+1;
         }
 
@@ -193,24 +240,46 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     }
 
     public void save() {
-            File exportDir = new File(Environment.getExternalStorageDirectory(), "JumpTestData");
-            if (!exportDir.exists())
-            {
-                exportDir.mkdirs();
-            }
+        File exportDir = new File(Environment.getExternalStorageDirectory(), "JumpTestData");
+        if (!exportDir.exists()) {
+            exportDir.mkdirs();
+        }
 
-            File file = new File(exportDir, "jumpTest.csv");
-            try {
-                file.createNewFile();
-                CSVWriter writer = new CSVWriter(new FileWriter(file));
-                writer.writeAll(mylist);
-                writer.close();
-                Toast.makeText(getApplicationContext(),"Save Complete",Toast.LENGTH_LONG).show();
-            }
-            catch (IOException e) {
-                System.out.println(e.getMessage());
-                Toast.makeText(getApplicationContext(),"Couldn't Save",Toast.LENGTH_LONG).show();
-            }
+        File file = new File(exportDir, "jumpTest" + DateToStr + ".csv");
+        try {
+            file.createNewFile();
+            CSVWriter writer = new CSVWriter(new FileWriter(file));
+            writer.writeAll(mylist);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        TransferObserver observer = transferUtility.upload("initiraltestbucket", file.getName(),
+                file);
+        transferObserverListener(observer);
+        Toast.makeText(getApplicationContext(), "Upload Complete", Toast.LENGTH_SHORT).show();
     }
 
+    public void transferObserverListener(TransferObserver transferObserver){
+
+        transferObserver.setTransferListener(new TransferListener(){
+
+            @Override
+            public void onStateChanged(int id, TransferState state) {
+                Log.e("statechange", state+"");
+            }
+
+            @Override
+            public void onProgressChanged(int id, long bytesCurrent, long bytesTotal) {
+                int percentage = (int) (bytesCurrent/bytesTotal * 100);
+                Log.e("percentage",percentage +"");
+            }
+
+            @Override
+            public void onError(int id, Exception ex) {
+                Log.e("error","error");
+            }
+
+        });
+    }
 }
