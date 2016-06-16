@@ -1,0 +1,227 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="com.example.jonny.projectapp.AssessmentScreen"
+    android:baselineAligned="false">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/seekBarAppetite"
+        android:id="@+id/setText"
+        android:textStyle="normal"
+        android:textSize="20dp"
+        android:textIsSelectable="true"
+        android:textColor="#ffaaaaaa"
+        android:paddingTop="25dp"
+        android:paddingBottom="15dp" />
+
+            <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar"
+        android:max="10"
+        android:progress="5" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/seekBarFatigue"
+        android:id="@+id/textView2"
+        android:textStyle="normal"
+        android:textSize="20dp"
+        android:textIsSelectable="true"
+        android:textColor="#ffaaaaaa"
+        android:paddingTop="25dp"
+        android:paddingBottom="15dp" />
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar2"
+        android:max="10"
+        android:progress="5" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/seekBarIllness"
+        android:id="@+id/textView3"
+        android:textStyle="normal"
+        android:textSize="20dp"
+        android:textIsSelectable="true"
+        android:textColor="#ffaaaaaa"
+        android:paddingTop="25dp"
+        android:paddingBottom="15dp" />
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar3"
+        android:max="10"
+        android:progress="5" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/seekBarMood"
+        android:id="@+id/textView4"
+        android:textStyle="normal"
+        android:textSize="20dp"
+        android:textIsSelectable="true"
+        android:textColor="#ffaaaaaa"
+        android:paddingTop="25dp"
+        android:paddingBottom="15dp" />
+
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar4"
+        android:max="10"
+        android:progress="5" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="@string/seekBarMotivation"
+        android:id="@+id/textView5"
+        android:textStyle="normal"
+        android:textSize="20dp"
+        android:textIsSelectable="true"
+        android:textColor="#ffaaaaaa"
+        android:paddingTop="25dp"
+        android:paddingBottom="15dp" />
+
+            <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/seekBar5"
+        android:max="10"
+        android:progress="5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/seekBarNutrition"
+                android:id="@+id/textView7"
+                android:textStyle="normal"
+                android:textSize="20dp"
+                android:textIsSelectable="true"
+                android:textColor="#ffaaaaaa"
+                android:paddingTop="25dp"
+                android:paddingBottom="15dp" />
+
+            <SeekBar
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar6"
+                android:max="10"
+                android:progress="5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/seekBarRecovery"
+                android:id="@+id/textView8"
+                android:textStyle="normal"
+                android:textSize="20dp"
+                android:textIsSelectable="true"
+                android:textColor="#ffaaaaaa"
+                android:paddingTop="25dp"
+                android:paddingBottom="15dp" />
+
+            <SeekBar
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar7"
+                android:max="10"
+                android:progress="5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/seekBarSleep"
+                android:id="@+id/textView9"
+                android:textStyle="normal"
+                android:textSize="20dp"
+                android:textIsSelectable="true"
+                android:textColor="#ffaaaaaa"
+                android:paddingTop="25dp"
+                android:paddingBottom="15dp" />
+
+            <SeekBar
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar8"
+                android:max="10"
+                android:progress="5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/seekBarSoreness"
+                android:id="@+id/textView10"
+                android:textStyle="normal"
+                android:textSize="20dp"
+                android:textIsSelectable="true"
+                android:textColor="#ffaaaaaa"
+                android:paddingTop="25dp"
+                android:paddingBottom="15dp"
+                android:singleLine="false" />
+
+            <SeekBar
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar9"
+                android:max="10"
+                android:progress="5" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/seekBarStress"
+                android:id="@+id/textView11"
+                android:textStyle="normal"
+                android:textSize="20dp"
+                android:textIsSelectable="true"
+                android:textColor="#ffaaaaaa"
+                android:paddingTop="25dp"
+                android:paddingBottom="15dp" />
+
+            <SeekBar
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/seekBar10"
+                android:max="10"
+                android:progress="5" />
+
+            <Button
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:text="SAVE"
+                android:id="@+id/save" />
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

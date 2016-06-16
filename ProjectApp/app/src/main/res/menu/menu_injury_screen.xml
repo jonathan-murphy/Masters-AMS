@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools" tools:context=".InjuryScreen">
+    <item android:id="@+id/action_settings" android:title="@string/action_settings"
+        android:orderInCategory="100" app:showAsAction="never" />
+
+    <item
+        android:id="@+id/item_core"
+        android:title="Core"/>
+
+    <item
+        android:id="@+id/item_lowerBody"
+        android:title="Lower Body"/>
+
+    <item
+        android:id="@+id/item_upperBody"
+        android:title="Upper Body"/>
+
+</menu>

@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">ProjectApp</string>
+
+    <string name="action_settings">Settings</string>
+
+    <string name="title_activity_assessment_screen">ASSESSMENT</string>
+    <string name="seekBarAppetite">APPETITE</string>
+    <string name="seekBarFatigue">FATIGUE</string>
+    <string name="seekBarIllness">ILLNESS</string>
+    <string name="seekBarMood">MOOD</string>
+    <string name="seekBarMotivation">MOTIVATION</string>
+    <string name="seekBarNutrition">NUTRITION</string>
+    <string name="seekBarRecovery">RECOVERY</string>
+    <string name="seekBarSleep">SLEEP</string>
+    <string name="seekBarSoreness">SORENESS</string>
+    <string name="seekBarStress">STRESS</string>
+
+    <string name="weight">WEIGHT</string>
+    <string name="weightKg">KG</string>
+    <string name="weightG">g</string>
+    <string name="calories">CALORIES</string>
+    <string name="protein">PROTEIN</string>
+    <string name="carbs">CARBS</string>
+    <string name="fats">FATS</string>
+
+    <string name="title_activity_analysis_screen">ANALYSIS</string>
+    <string name="title_activity_nutrition_screen">NUTRITION</string>
+
+    <string name="title_activity_injury_screen">INJURY</string>
+    <string name="buttonAddInjury">ADD INJURY</string>
+    <string name="title_activity_side_menu">sideMenu</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="title_activity_test_screen">TEST</string>
+
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="startTap">Press TAP to start</string>
+
+</resources>
