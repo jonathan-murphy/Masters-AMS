@@ -218,9 +218,10 @@
 
             <Button
                 android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="80dp"
                 android:text="SAVE"
-                android:id="@+id/save" />
+                android:id="@+id/save"
+                android:layout_marginTop="20dp" />
         </LinearLayout>
     </ScrollView>
 

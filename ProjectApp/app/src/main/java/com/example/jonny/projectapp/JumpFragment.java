@@ -101,8 +101,7 @@ public class JumpFragment extends Fragment implements SensorEventListener{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        credentialsProvider();
-        setTransferUtility();
+        transferUtility = awsSetup.getTransferUtility(getActivity());
     }
 
     @Override
@@ -110,9 +109,6 @@ public class JumpFragment extends Fragment implements SensorEventListener{
                              Bundle savedInstanceState) {
 
         final View view = inflater.inflate(R.layout.fragment_jump_screen, container, false);
-
-//        credentialsProvider();
-//        setTransferUtility();
 
         v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
@@ -128,7 +124,6 @@ public class JumpFragment extends Fragment implements SensorEventListener{
             Toast.makeText(getActivity(), "No Accelerometer Found", Toast.LENGTH_LONG).show();
         }
 
-        //final Button startButton = (Button) getActivity().findViewById(R.id.start);
         final Button startButton = (Button)view.findViewById(R.id.start);
         startButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -141,36 +136,6 @@ public class JumpFragment extends Fragment implements SensorEventListener{
         });
         return view;
     }
-
-
-
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-//                             Bundle savedInstanceState) {
-//        // Inflate the layout for this fragment
-//        return inflater.inflate(R.layout.fragment_jump_screen, container, false);
-//    }
-
-    public void credentialsProvider(){
-        // Initialize the Amazon Cognito credentials provider
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                getActivity().getApplicationContext(),
-                "us-east-1:c161571a-167b-4647-bd16-263937eec637", // Identity Pool ID
-                Regions.US_EAST_1 // Region
-        );
-
-        setAmazonS3Client(credentialsProvider);
-    }
-
-    public void setAmazonS3Client(CognitoCachingCredentialsProvider credentialsProvider){
-        s3 = new AmazonS3Client(credentialsProvider);
-        s3.setRegion(Region.getRegion(Regions.US_EAST_1));
-    }
-
-    public void setTransferUtility(){
-        transferUtility = new TransferUtility(s3, getContext().getApplicationContext());
-    }
-
 
     public void initializeTimerTask() {
 
@@ -236,7 +201,6 @@ public class JumpFragment extends Fragment implements SensorEventListener{
                         }
                     });
             snack.show();
-            //Snackbar.make(getActivity().findViewById(android.R.id.content), "No images.", Snackbar.LENGTH_LONG).show();
             testComplete = true;
         }
     }

@@ -47,8 +47,7 @@ public class AssessmentScreen extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_assessment_screen);
 
-        credentialsProvider();
-        setTransferUtility();
+        transferUtility = awsSetup.getTransferUtility(this);
 
         Date curDate = new Date();
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy hh:mm:ss a");
@@ -119,26 +118,6 @@ public class AssessmentScreen extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    public void credentialsProvider(){
-        // Initialize the Amazon Cognito credentials provider
-        CognitoCachingCredentialsProvider credentialsProvider = new CognitoCachingCredentialsProvider(
-                getApplicationContext(),
-                "us-east-1:c161571a-167b-4647-bd16-263937eec637", // Identity Pool ID
-                Regions.US_EAST_1 // Region
-        );
-
-        setAmazonS3Client(credentialsProvider);
-    }
-
-    public void setAmazonS3Client(CognitoCachingCredentialsProvider credentialsProvider){
-        s3 = new AmazonS3Client(credentialsProvider);
-        s3.setRegion(Region.getRegion(Regions.US_EAST_1));
-    }
-
-    public void setTransferUtility(){
-        transferUtility = new TransferUtility(s3, getApplicationContext());
     }
 
     public void save() {
