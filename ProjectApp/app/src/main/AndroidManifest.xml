@@ -24,6 +24,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".SleepAnalysisScreen"
+            android:label="@string/title_activity_sleep_analysis_screen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".WakeUpScreen"
+            android:label="@string/title_activity_wake_up_screen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SleepScreen"
+            android:label="@string/title_activity_sleep_screen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".SleepingScreen"
+            android:label="@string/title_activity_sleeping_screen"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".AssessmentScreen"
             android:label="@string/title_activity_assessment_screen" />
         <activity

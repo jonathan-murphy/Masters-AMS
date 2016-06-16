@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:background="#555555">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="YOU SLEPT X HOURS"
+        android:id="@+id/hoursSlept"
+        android:textColor="#eeeeee"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="GOOD MORNING!"
+        android:id="@+id/goodMorning"
+        android:layout_above="@+id/hoursSlept"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"
+        android:textColor="#dddddd" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="HOW DID YOU SLEEP?"
+        android:id="@+id/rateSleep"
+        android:layout_below="@+id/hoursSlept"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
+        android:textColor="#dddddd" />
+
+    <RatingBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/sleepRating"
+        android:layout_below="@+id/rateSleep"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:rating="3"
+        android:stepSize="1" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="CONFIRM"
+        android:id="@+id/confirmRatingButton"
+        android:layout_below="@+id/sleepRating"
+        android:layout_centerHorizontal="true" />
+</RelativeLayout>

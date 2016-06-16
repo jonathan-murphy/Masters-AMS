@@ -1,7 +1,6 @@
 package com.example.jonny.projectapp;
 
 import android.content.Intent;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -22,7 +21,7 @@ public class HomeScreen extends ActionBarActivity {
         ImageButton assessmentButton = (ImageButton) findViewById(R.id.imageButton4);
         ImageButton injuryButton = (ImageButton) findViewById(R.id.imageButton2);
         ImageButton testButton = (ImageButton) findViewById(R.id.imageButton5);
-        ImageButton tapTestButton = (ImageButton) findViewById(R.id.tapTestButton);
+        ImageButton sleepButton = (ImageButton) findViewById(R.id.imageButton);
         ImageButton analysisButton = (ImageButton) findViewById(R.id.imageButton6);
         final ImageButton popupButton = (ImageButton) findViewById(R.id.imageButton3);
 
@@ -46,6 +45,14 @@ public class HomeScreen extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(HomeScreen.this, AssessmentScreen.class);
+                startActivity(intent);
+            }
+        });
+
+        sleepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomeScreen.this, SleepScreen.class);
                 startActivity(intent);
             }
         });

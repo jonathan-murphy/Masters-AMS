@@ -23,6 +23,11 @@
     <string name="carbs">CARBS</string>
     <string name="fats">FATS</string>
 
+    <string name="title_activity_sleep_analysis_screen">SLEEP ANALYSIS</string>
+    <string name="title_activity_wake_up_screen">WAKE UP</string>
+    <string name="title_activity_sleep_screen">SLEEP</string>
+    <string name="title_activity_sleeping_screen">SLEEPING</string>
+
     <string name="title_activity_analysis_screen">ANALYSIS</string>
     <string name="title_activity_nutrition_screen">NUTRITION</string>
 
