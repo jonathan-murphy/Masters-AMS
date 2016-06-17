@@ -11,6 +11,7 @@ package com.example.jonny.projectapp;
         import android.support.design.widget.Snackbar;
         import android.support.design.widget.CoordinatorLayout;
         import android.support.v4.app.Fragment;
+        import android.support.v7.app.AppCompatActivity;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.view.ViewGroup;
@@ -78,6 +79,8 @@ public class TapFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tap_screen, container, false);
+
+        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
         textCounter = (TextView)view.findViewById(R.id.timerValue);
 

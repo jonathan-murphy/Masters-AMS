@@ -110,6 +110,8 @@ public class JumpFragment extends Fragment implements SensorEventListener{
 
         final View view = inflater.inflate(R.layout.fragment_jump_screen, container, false);
 
+        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+
         v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 
         samples = recordTime * sampleRate; // calculating neccesary number of samples to record

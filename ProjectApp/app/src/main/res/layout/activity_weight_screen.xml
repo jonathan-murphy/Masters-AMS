@@ -8,15 +8,15 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="50dp">
+        android:layout_weight=".2">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/weight"
             android:id="@+id/weightText"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_weight="0.5" />
 
         <EditText
             android:layout_width="50dp"
@@ -30,7 +30,8 @@
             android:layout_height="wrap_content"
             android:text="@string/weightKg"
             android:id="@+id/weightUnit"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_weight=".5" />
 
     </LinearLayout>
 
@@ -38,15 +39,15 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="50dp">
+        android:layout_weight=".2">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/calories"
             android:id="@+id/caloriesText"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_weight=".5" />
 
         <EditText
             android:layout_width="50dp"
@@ -60,7 +61,8 @@
             android:layout_height="wrap_content"
             android:text="@string/weightG"
             android:id="@+id/caloriesUnit"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_weight=".5" />
 
     </LinearLayout>
 
@@ -68,15 +70,15 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="50dp">
+        android:layout_weight=".2">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/protein"
             android:id="@+id/proteinText"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_marginLeft="20dp" />
 
         <EditText
             android:layout_width="50dp"
@@ -90,7 +92,8 @@
             android:layout_height="wrap_content"
             android:text="@string/weightG"
             android:id="@+id/proteinUnit"
-            android:textSize="20dp" />
+            android:textSize="20dp"
+            android:layout_gravity="center_horizontal" />
 
     </LinearLayout>
 
@@ -98,8 +101,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="50dp">
+        android:layout_weight=".2">
 
         <TextView
             android:layout_width="wrap_content"
@@ -128,8 +130,7 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginLeft="50dp">
+        android:layout_weight=".2">
 
         <TextView
             android:layout_width="wrap_content"
@@ -159,7 +160,7 @@
         android:layout_height="wrap_content"
         android:text="FINISHED"
         android:id="@+id/button2"
-        android:layout_weight="0.13" />
+        android:layout_marginTop="10dp" />
 
 
 </LinearLayout>
