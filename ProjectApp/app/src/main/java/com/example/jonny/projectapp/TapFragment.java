@@ -80,7 +80,7 @@ public class TapFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tap_screen, container, false);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 
         textCounter = (TextView)view.findViewById(R.id.timerValue);
 

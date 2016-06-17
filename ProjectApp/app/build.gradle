@@ -25,4 +25,5 @@ dependencies {
     compile 'com.android.support:design:23.1.1'
     compile files('libs/aws-android-sdk-cognito-2.2.18.jar')
     compile files('libs/opencsv-3.7.jar')
+    compile project(':openCVLibrary310')
 }

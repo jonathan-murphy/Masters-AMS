@@ -110,7 +110,7 @@ public class JumpFragment extends Fragment implements SensorEventListener{
 
         final View view = inflater.inflate(R.layout.fragment_jump_screen, container, false);
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        //((AppCompatActivity) getActivity()).getSupportActionBar().show();
 
         v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
 

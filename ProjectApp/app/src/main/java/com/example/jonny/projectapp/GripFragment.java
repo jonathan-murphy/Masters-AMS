@@ -30,7 +30,7 @@ public class GripFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        //((AppCompatActivity) getActivity()).getSupportActionBar().hide();
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_grip_screen, container, false);
     }
