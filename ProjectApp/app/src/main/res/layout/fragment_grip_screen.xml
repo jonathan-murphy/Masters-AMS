@@ -7,8 +7,10 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:text="GRIP!!!"
+        android:layout_height="match_parent"
+        android:text="GRIP"
         android:id="@+id/gripButton"
-        android:layout_gravity="center_vertical" />
+        android:layout_gravity="center_vertical"
+        android:textSize="50dp"
+        android:background="@android:color/transparent" />
 </LinearLayout>

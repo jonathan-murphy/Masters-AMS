@@ -43,7 +43,7 @@
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="startTap">Press TAP to start</string>
 
-    <string name="title_activity_hello_open_cv">HelloOpenCvActivity</string>
+    <string name="title_activity_open_cv">OpenCvActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
 
