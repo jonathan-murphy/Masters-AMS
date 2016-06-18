@@ -1,6 +1,7 @@
 package com.example.jonny.projectapp;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.MotionEvent;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -30,6 +32,8 @@ import org.opencv.imgproc.Imgproc;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 
 /**
@@ -40,6 +44,10 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
     private CameraBridgeViewBase mOpenCvCameraView;
     private static final String TAG = "CameraViewFragment";
     CameraBridgeViewBase.CvCameraViewFrame outputFrame;
+
+    private Timer timer  = new Timer();;
+    private TimerTask timerTask ;
+    int timerSync = 0;
 
     double threshold1 = 10;
     double threshold2 = 100;
@@ -60,6 +68,7 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
     Scalar lowerHue = new Scalar(0,100,100);
     Scalar upperHue = new Scalar(30,255,255);
     Scalar color = new Scalar(255, 255, 0);
+    TextView status;
 
     //Vector<Rect> boundRect;
     //MatOfPoint contours;
@@ -71,10 +80,39 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.opencvlayout);
+
+        status = (TextView)findViewById(R.id.imageStatus);
+        status.setText("CALIBRATING");
+
         mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.OpenCvView);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
         mOpenCvCameraView.setCvCameraViewListener(this);
         startTime = System.currentTimeMillis();
+
+        initializeTimerTask();
+        timer.schedule(timerTask, 1000, 1000);
+
+    }
+
+    public void initializeTimerTask() {
+
+        timerTask = new TimerTask() {
+            public void run() {
+                if (timerSync < 1){
+                    //status.setText("CALIBRATING");
+                }
+                else if (timerSync == 1){
+                    //status.setText("PROCESSING");
+                }
+                else if (timerSync == 2){
+                }
+                else {
+                    timer.cancel(); //turn off timer
+                    finish();
+                }
+                timerSync = timerSync + 1;
+            }
+        };
     }
 
 
@@ -133,18 +171,7 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
             }
         }
 
-        text = "STRETCH";
-
-        if (runTime> 0 && runTime <=2500){
-            calibVal = maxArea;
-            text = "CALIBRATING";
-        }
-
-        else if (runTime> 3500 && runTime <=4500){
-            maxVal = maxArea;
-        }
-
-        text = String.valueOf(contours.size());
+        //text = String.valueOf(contours.size());
 
         if (contours.size() > 0){
             MatOfPoint2f approxCurve = new MatOfPoint2f();
@@ -154,7 +181,7 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
             MatOfPoint points = new MatOfPoint(approxCurve.toArray()); // converting back to mat point
             Rect rect = Imgproc.boundingRect(points); // getting bounding rectangle
             Imgproc.rectangle(inputImage, rect.br(), rect.tl(), color);
-            Imgproc.putText(inputImage, text, position, 3, 1, new Scalar(255, 255, 255, 255), 2);
+            //Imgproc.putText(inputImage, text, position, 3, 1, new Scalar(255, 255, 255, 255), 2);
             Imgproc.drawContours(inputImage, contours, maxAreaId, color, -1);
         }
         else {
