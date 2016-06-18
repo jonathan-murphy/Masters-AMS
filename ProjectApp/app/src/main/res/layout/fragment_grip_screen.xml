@@ -7,7 +7,7 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:text="GRIP!!!"
         android:id="@+id/gripButton"
         android:layout_gravity="center_vertical" />

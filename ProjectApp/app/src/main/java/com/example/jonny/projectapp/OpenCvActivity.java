@@ -82,20 +82,22 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
 
         List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
         Mat inputImage = inputFrame.rgba();
-        org.opencv.core.Size blurAmount = new Size(15,15);
-        int contourIdx = 0;
+        org.opencv.core.Size blurAmount = new Size(5,5);
         Mat outputImage = new Mat();
         Mat blurredImage = new Mat();
         Mat rangeImage = new Mat();
         Mat cannyOut = new Mat();
-        Mat drawing =  new Mat(inputImage.size(), CvType.CV_8UC3);
+        Mat erodedImage = new Mat();
+        Mat dilatedImage = new Mat();
         Scalar lower = new Scalar(0,100,100);
         Scalar upper = new Scalar(30,255,255);
         Scalar color = new Scalar(255, 255, 0);
         Imgproc.cvtColor(inputImage, outputImage , Imgproc.COLOR_RGB2HSV_FULL);
         Imgproc.GaussianBlur(outputImage, blurredImage, blurAmount, 2);
         Core.inRange(blurredImage ,lower , upper, rangeImage);
-        Imgproc.Canny(rangeImage, cannyOut, 10, 100);
+        Imgproc.dilate(rangeImage , dilatedImage, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9,9)));
+        Imgproc.erode(dilatedImage , erodedImage, Imgproc.getStructuringElement(Imgproc.MORPH_RECT, new Size(9,9)));
+        Imgproc.Canny(erodedImage, cannyOut, 10, 100);
         Imgproc.findContours(cannyOut, contours, new Mat(), Imgproc.RETR_LIST, Imgproc.CHAIN_APPROX_SIMPLE);
 
         double maxArea = -1;
@@ -111,6 +113,14 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
             }
         }
 
+        String text = String.valueOf(maxArea);
+        double fontScale = 2;
+        int thickness = 2;
+        Point position = new Point(100, 500);
+
+        // center the text
+        //Point textOrg((inputImage.cols - textSize.width)/2, (img.rows + textSize.height)/2);
+        //Point textOrg = new Point(150, 2000);
         MatOfPoint2f approxCurve = new MatOfPoint2f();
         MatOfPoint2f contour2f = new MatOfPoint2f( contours.get(maxAreaId).toArray() );
         double approxDistance = Imgproc.arcLength(contour2f, true)*0.02;
@@ -118,7 +128,9 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
         MatOfPoint points = new MatOfPoint( approxCurve.toArray() ); // converting back to mat point
         Rect rect = Imgproc.boundingRect(points); // getting bounding rectangle
         Imgproc.rectangle(inputImage, rect.br(), rect.tl(), color);
-        //Imgproc.drawContours(inputImage, contours, maxAreaIdx, color);
+        Imgproc.putText(inputImage, text, position, 3, 1, new Scalar(255, 255, 255, 255), 2);
+        //Imgproc.putText()
+        Imgproc.drawContours(inputImage, contours, maxAreaId, color, -1);
         return inputImage;
     }
 
