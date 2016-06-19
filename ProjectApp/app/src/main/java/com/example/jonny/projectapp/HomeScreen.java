@@ -23,23 +23,32 @@ public class HomeScreen extends ActionBarActivity {
         ImageButton testButton = (ImageButton) findViewById(R.id.imageButton5);
         ImageButton sleepButton = (ImageButton) findViewById(R.id.imageButton);
         ImageButton analysisButton = (ImageButton) findViewById(R.id.imageButton6);
-        final ImageButton popupButton = (ImageButton) findViewById(R.id.imageButton3);
+        ImageButton scoreButton = (ImageButton) findViewById(R.id.imageButton3);
+        //final ImageButton popupButton = (ImageButton) findViewById(R.id.imageButton3);
 
-        popupButton.setOnClickListener(new View.OnClickListener() {
+//        popupButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                PopupMenu popup = new PopupMenu(HomeScreen.this,popupButton);
+//                popup.getMenuInflater().inflate(R.menu.menu_home_screen,popup.getMenu());
+//
+//                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//                    public boolean onMenuItemClick(MenuItem item) {
+//                        Toast.makeText(HomeScreen.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
+//                        return true;
+//                    }
+//                });
+//                popup.show();//showing popup menu
+//            }
+//        });//closing the setOnClickListener method
+
+        scoreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PopupMenu popup = new PopupMenu(HomeScreen.this,popupButton);
-                popup.getMenuInflater().inflate(R.menu.menu_home_screen,popup.getMenu());
-
-                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                    public boolean onMenuItemClick(MenuItem item) {
-                        Toast.makeText(HomeScreen.this,"You Clicked : " + item.getTitle(),Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-                });
-                popup.show();//showing popup menu
+                Intent intent = new Intent(HomeScreen.this, ScoreScreen.class);
+                startActivity(intent);
             }
-        });//closing the setOnClickListener method
+        });
 
         assessmentButton.setOnClickListener(new View.OnClickListener() {
             @Override

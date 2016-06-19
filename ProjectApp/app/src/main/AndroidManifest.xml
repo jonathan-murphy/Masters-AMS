@@ -50,8 +50,8 @@
         <activity
             android:name=".WakeUpScreen"
             android:label="@string/title_activity_wake_up_screen"
-            android:showOnLockScreen="true"
             android:screenOrientation="sensorPortrait"
+            android:showOnLockScreen="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".SleepScreen"
@@ -82,19 +82,23 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".OpenCvActivity"
-            android:screenOrientation="portrait"
             android:label="@string/title_activity_open_cv"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name="com.amazonaws.mobileconnectors.s3.transferutility.TransferService"
             android:enabled="true" />
-
         <service
             android:name=".AlarmService"
             android:enabled="true" />
+
         <receiver android:name=".AlarmReceiver" />
 
+        <activity
+            android:name=".ScoreScreen"
+            android:label="@string/title_activity_score_screen"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

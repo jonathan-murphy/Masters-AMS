@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#222222">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="79"
+        android:id="@+id/sleepScore"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#eeeeee"
+        android:textSize="100dp"
+        android:layout_margin="100dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="YOU SLEPT X HOURS"
+        android:id="@+id/textView12"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#eeeeee" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="IMAGE OF SLEEP ACTIVITY"
+        android:id="@+id/textView14"
+        android:layout_gravity="center_horizontal"
+        android:textColor="#eeeeee"
+        android:layout_marginTop="50dp" />
+</LinearLayout>
