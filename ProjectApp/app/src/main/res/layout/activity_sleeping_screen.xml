@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/textView"
+        android:id="@+id/hoursLeft"
         android:layout_below="@+id/currentTime"
         android:layout_centerHorizontal="true"
         android:textColor="#999999"

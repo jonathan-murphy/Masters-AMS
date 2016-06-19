@@ -12,6 +12,9 @@ import android.widget.ImageButton;
  * Created by Jonny on 16/06/2016.
  */
 public class SleepFragment extends Fragment {
+
+    long sleepStartTime;
+
     public SleepFragment() {
         // Required empty public constructor
     }
@@ -29,14 +32,14 @@ public class SleepFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
         View view =  inflater.inflate(R.layout.fragment_sleep_screen, container, false);
 
         ImageButton goToSleepButton = (ImageButton) view.findViewById(R.id.sleepButton);
-
         goToSleepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                long sleepStartTime = System.currentTimeMillis(); // get the time user says they are going to sleep
                 Intent intent = new Intent(getActivity(), SleepingScreen.class);
                 startActivity(intent);
 

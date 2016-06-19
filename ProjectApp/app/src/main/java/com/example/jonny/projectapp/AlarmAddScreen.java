@@ -66,6 +66,9 @@ public class AlarmAddScreen extends Activity {
                 calendar.set(Calendar.HOUR_OF_DAY, alarmTimePicker.getCurrentHour());
                 calendar.set(Calendar.MINUTE, alarmTimePicker.getCurrentMinute());
             }
+
+            long alarmSetTime = calendar.getTimeInMillis();
+
             Intent myIntent = new Intent(AlarmAddScreen.this, AlarmReceiver.class);
             pendingIntent = PendingIntent.getBroadcast(AlarmAddScreen.this, 0, myIntent, 0);
             alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);

@@ -50,11 +50,12 @@ public class AssessmentScreen extends ActionBarActivity {
         transferUtility = awsSetup.getTransferUtility(this);
 
         Date curDate = new Date();
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy hh:mm:ss a");
+        //SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy hh:mm:ss a");
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yy");
         DateToStr = format.format(curDate);
 
-        mylist.add(new String[]{DateToStr});
-        mylist.add(new String[]{"Factor","Rating"});
+        //mylist.add(new String[]{DateToStr});
+        //mylist.add(new String[]{"Factor","Rating"});
 
         final SeekBar appetite = (SeekBar)findViewById(R.id.seekBar);
         final SeekBar fatigue = (SeekBar)findViewById(R.id.seekBar2);
@@ -82,16 +83,27 @@ public class AssessmentScreen extends ActionBarActivity {
                 String sorval = String.valueOf(soreness.getProgress());
                 String strval = String.valueOf(stress.getProgress());
 
-                mylist.add(new String[]{"Appetite",appval});
-                mylist.add(new String[]{"Fatigue",fatval});
-                mylist.add(new String[]{"Illness",illval});
-                mylist.add(new String[]{"Mood",mooval});
-                mylist.add(new String[]{"Motivation",motval});
-                mylist.add(new String[]{"Nutrition",nutval});
-                mylist.add(new String[]{"Recovery",recval});
-                mylist.add(new String[]{"Sleep",sleval});
-                mylist.add(new String[]{"Soreness",sorval});
-                mylist.add(new String[]{"Stress",strval});
+//                mylist.add(new String[]{"Appetite",appval});
+//                mylist.add(new String[]{"Fatigue",fatval});
+//                mylist.add(new String[]{"Illness",illval});
+//                mylist.add(new String[]{"Mood",mooval});
+//                mylist.add(new String[]{"Motivation",motval});
+//                mylist.add(new String[]{"Nutrition",nutval});
+//                mylist.add(new String[]{"Recovery",recval});
+//                mylist.add(new String[]{"Sleep",sleval});
+//                mylist.add(new String[]{"Soreness",sorval});
+//                mylist.add(new String[]{"Stress",strval});
+
+                mylist.add(new String[]{appval});
+                mylist.add(new String[]{fatval});
+                mylist.add(new String[]{illval});
+                mylist.add(new String[]{mooval});
+                mylist.add(new String[]{motval});
+                mylist.add(new String[]{nutval});
+                mylist.add(new String[]{recval});
+                mylist.add(new String[]{sleval});
+                mylist.add(new String[]{sorval});
+                mylist.add(new String[]{strval});
                 save();
             }
         });
@@ -121,24 +133,49 @@ public class AssessmentScreen extends ActionBarActivity {
     }
 
     public void save() {
-        File exportDir = new File(Environment.getExternalStorageDirectory(), "JumpTestData");
+        File exportDir = new File(Environment.getExternalStorageDirectory(), "ProjectAppData");
         if (!exportDir.exists()) {
             exportDir.mkdirs();
         }
 
+        // Checking to see if a file for today already exists
         File file = new File(exportDir, "assessment" + DateToStr + ".csv");
-        try {
-            file.createNewFile();
+
+        if(file.exists()) {
+            Toast.makeText(getApplicationContext(), "File exists", Toast.LENGTH_SHORT).show();
+            try {
             CSVWriter writer = new CSVWriter(new FileWriter(file));
             writer.writeAll(mylist);
             writer.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
-        TransferObserver observer = transferUtility.upload("initiraltestbucket", file.getName(),
-                file);
-        transferObserverListener(observer);
-        Toast.makeText(getApplicationContext(), "Upload Complete", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            Toast.makeText(getApplicationContext(), "Creating file", Toast.LENGTH_SHORT).show();
+            try {
+                file.createNewFile();
+                CSVWriter writer = new CSVWriter(new FileWriter(file));
+                writer.writeAll(mylist);
+                writer.close();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+// Do something else.
+//        File file = new File(exportDir, "assessment" + DateToStr + ".csv");
+//        try {
+//            file.createNewFile();
+//            CSVWriter writer = new CSVWriter(new FileWriter(file));
+//            writer.writeAll(mylist);
+//            writer.close();
+//        } catch (IOException e) {
+//            System.out.println(e.getMessage());
+//        }
+//        TransferObserver observer = transferUtility.upload("initiraltestbucket", file.getName(),
+//                file);
+//        transferObserverListener(observer);
+//        Toast.makeText(getApplicationContext(), "Upload Complete", Toast.LENGTH_SHORT).show();
     }
 
     public void transferObserverListener(TransferObserver transferObserver){

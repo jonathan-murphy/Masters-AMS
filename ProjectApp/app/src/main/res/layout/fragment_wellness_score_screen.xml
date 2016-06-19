@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="84"
-        android:id="@+id/wellnesssScore"
+        android:id="@+id/wellnessScore"
         android:layout_gravity="center_horizontal"
         android:textColor="#eeeeee"
         android:textSize="100dp"
@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="YOU READY TO TRAIN HARD"
-        android:id="@+id/textView12"
+        android:id="@+id/wellnessAction"
         android:layout_gravity="center_horizontal"
         android:textColor="#eeeeee" />
 </LinearLayout>

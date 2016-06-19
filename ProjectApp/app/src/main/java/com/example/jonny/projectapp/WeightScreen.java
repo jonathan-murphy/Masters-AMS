@@ -1,6 +1,7 @@
 package com.example.jonny.projectapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.MenuItem;
@@ -13,9 +14,6 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Created by johnaton on 15/06/2016.
- */
 public class WeightScreen extends Activity {
 
     TextView tv;
@@ -33,15 +31,17 @@ public class WeightScreen extends Activity {
         carbs = (EditText) findViewById(R.id.carbsVal);
         fats = (EditText) findViewById(R.id.fatsVal);
 
-        Button btn = (Button) findViewById(R.id.button2);
-        btn.setOnClickListener(new View.OnClickListener() {
+        Button saveButton = (Button) findViewById(R.id.saveWeightButton);
+        saveButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 wei = weight.getText().toString();
                 cal = calories.getText().toString();
                 pro = protein.getText().toString();
                 fat = fats.getText().toString();
                 car = carbs.getText().toString();
-                Toast.makeText(getApplicationContext(), pro, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "SAVED", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(WeightScreen.this, HomeScreen.class);
+                startActivity(intent);
             }
         });
     }
