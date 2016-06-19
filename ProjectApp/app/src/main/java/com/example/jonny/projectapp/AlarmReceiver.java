@@ -21,6 +21,7 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
 //        context.startActivity(alarm);
 
         Intent wake = new Intent(context, WakeUpScreen.class);
+        wake.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(wake);
 
         //inst.setAlarmText("Alarm! Wake up! Wake up!");
@@ -28,17 +29,17 @@ public class AlarmReceiver extends WakefulBroadcastReceiver {
         //this will sound the alarm tone
         //this will sound the alarm once, if you wish to
         //raise alarm in loop continuously then use MediaPlayer and setLooping(true)
-        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        if (alarmUri == null) {
-            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-        }
-        Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
-        ringtone.play();
+//        Uri alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+//        if (alarmUri == null) {
+//            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//        }
+//        Ringtone ringtone = RingtoneManager.getRingtone(context, alarmUri);
+//        ringtone.play();
 
         //this will send a notification message
-        ComponentName comp = new ComponentName(context.getPackageName(),
-                AlarmService.class.getName());
-        startWakefulService(context, (intent.setComponent(comp)));
-        setResultCode(Activity.RESULT_OK);
+//        ComponentName comp = new ComponentName(context.getPackageName(),
+//                AlarmService.class.getName());
+//        startWakefulService(context, (intent.setComponent(comp)));
+//        setResultCode(Activity.RESULT_OK);
     }
 }

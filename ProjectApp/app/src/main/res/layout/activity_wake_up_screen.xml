@@ -4,10 +4,13 @@
     android:background="#222222">
 
     <Button
-        android:layout_width="150dp"
-        android:layout_height="70dp"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
         android:text="WAKE UP"
         android:id="@+id/wakeUpButton"
+        android:background="@android:color/transparent"
+        android:textColor="#eeeeee"
+        android:textSize="40dp"
         android:layout_centerVertical="true"
         android:layout_centerHorizontal="true" />
 

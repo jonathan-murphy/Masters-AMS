@@ -27,8 +27,8 @@ public class SleepingScreen extends AppCompatActivity{
         TextView currentTimeView = (TextView)findViewById(R.id.currentTime);
         currentTimeView.setText(TimeToStr);
 
-        Intent intent = new Intent(SleepingScreen.this, WakeUpScreen.class);
-        startActivity(intent);
+//        Intent intent = new Intent(SleepingScreen.this, WakeUpScreen.class);
+//        startActivity(intent);
     }
 
 }
