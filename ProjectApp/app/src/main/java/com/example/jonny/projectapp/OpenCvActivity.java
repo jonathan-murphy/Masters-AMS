@@ -1,15 +1,10 @@
 package com.example.jonny.projectapp;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.SurfaceView;
-import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -18,23 +13,19 @@ import org.opencv.android.CameraBridgeViewBase;
 import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfPoint;
 import org.opencv.core.MatOfPoint2f;
-import org.opencv.core.MatOfRect;
 import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -47,8 +38,19 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
 
     private Timer timer  = new Timer();;
     private TimerTask timerTask ;
-    int timerSync = 0;
+    int calibrationCycle = 0;
+    int analysisCycle = 0;
 
+    double bandArea = 0;
+    double bandAreaMax = 0;
+    double bandAreaMin = 100000;
+    boolean calibrated = false;
+    boolean stretched = false;
+    boolean analysing = false;
+    boolean analysed = false;
+    double stretchedArea = 0;
+    double calibratedArea = 0;
+    double analysedArea = 0;
     double threshold1 = 10;
     double threshold2 = 100;
     double prevArea = 0;
@@ -59,20 +61,19 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
     long time = 0;
     long startTime = 0;
     long runTime = 0;
-    String text;
+    String userNote = "NOTE";
+    String currentStatus = "CALIBRATING";
     double fontScale = 2;
     int thickness = 2;
     Point position = new Point(100, 100);
 
     org.opencv.core.Size blurAmount = new Size(5,5);
     Scalar lowerHue = new Scalar(0,100,100);
-    Scalar upperHue = new Scalar(30,255,255);
+    Scalar upperHue = new Scalar(35,255,255);
     Scalar color = new Scalar(255, 255, 0);
     TextView status;
-
-    //Vector<Rect> boundRect;
-    //MatOfPoint contours;
-    //List<MatOfPoint> contours = new ArrayList<MatOfPoint>();
+    TextView note;
+    final Handler statusHandler = new Handler();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,7 +83,9 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
         setContentView(R.layout.opencvlayout);
 
         status = (TextView)findViewById(R.id.imageStatus);
-        status.setText("CALIBRATING");
+        status.setText(currentStatus);
+        note = (TextView)findViewById(R.id.userNote);
+        note.setText(userNote);
 
         mOpenCvCameraView = (CameraBridgeViewBase) findViewById(R.id.OpenCvView);
         mOpenCvCameraView.setVisibility(SurfaceView.VISIBLE);
@@ -91,26 +94,70 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
 
         initializeTimerTask();
         timer.schedule(timerTask, 1000, 1000);
-
     }
+
+    final Runnable statusRunnable = new Runnable() {
+        public void run() {
+            status.setText(currentStatus);
+            note.setText(userNote);
+        }
+    };
 
     public void initializeTimerTask() {
 
         timerTask = new TimerTask() {
             public void run() {
-                if (timerSync < 1){
-                    //status.setText("CALIBRATING");
+
+                userNote = String.valueOf(bandArea);
+
+                double bandAreaChange = (bandAreaMax / bandAreaMin) - 1;
+                if (bandAreaChange <= 0.05 && calibrated == false) {
+                    calibratedArea = ((bandAreaMax - bandAreaMin) / 2) + bandAreaMin; // set calibrated area to middle of max and min values
+                    calibrated = true;
                 }
-                else if (timerSync == 1){
-                    //status.setText("PROCESSING");
+                else if (bandAreaMax > (calibratedArea * 1.5) && calibrated == true && analysing == false){
+                    stretched = true;
+                    analysing = true;
                 }
-                else if (timerSync == 2){
+                else if (bandAreaChange <= 0.075 && analysing == true){
+                    analysedArea = ((bandAreaMax - bandAreaMin) / 2) + bandAreaMin; // set analysed (i.e. stretched) area to middle of max and min values
+                    analysed = true;
                 }
-                else {
-                    timer.cancel(); //turn off timer
-                    finish();
+
+                if (calibrated == false){
+                    currentStatus = "CALIBRATING";
+                    userNote = String.valueOf(bandAreaChange);
+                    // reset band max & min values
+                    bandAreaMax = 0;
+                    bandAreaMin = 100000;
+                    statusHandler.post(statusRunnable);
+                    calibrationCycle++;
+                    if (calibrationCycle >=10){
+                        timer.cancel(); // turn off timer
+                        finish(); // close Activity
+                    }
                 }
-                timerSync = timerSync + 1;
+                else if (stretched == false){
+                    //stretched = true;
+                    //currentStatus = String.valueOf(calibratedArea);
+                    userNote = String.valueOf(bandAreaChange);
+                    currentStatus = "STRETCH";
+                    statusHandler.post(statusRunnable);
+                }
+                else if (stretched == true && analysing == true && analysed == false){
+                    currentStatus = "ANALYSING";
+                    userNote = String.valueOf(bandAreaChange);
+                    statusHandler.post(statusRunnable);
+                }
+                else if (analysed == true) {
+                    timer.cancel(); // turn off timer
+                    finish(); // close Activity
+                }
+
+                // reset band max & min values
+                bandAreaMax = 0;
+                bandAreaMin = 100000;
+
             }
         };
     }
@@ -171,7 +218,13 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
             }
         }
 
-        //text = String.valueOf(contours.size());
+        bandArea = maxArea;
+        if (bandArea > bandAreaMax) {
+            bandAreaMax = bandArea;
+        }
+        if (bandArea < bandAreaMin) {
+            bandAreaMin = bandArea;
+        }
 
         if (contours.size() > 0){
             MatOfPoint2f approxCurve = new MatOfPoint2f();
@@ -181,7 +234,6 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
             MatOfPoint points = new MatOfPoint(approxCurve.toArray()); // converting back to mat point
             Rect rect = Imgproc.boundingRect(points); // getting bounding rectangle
             Imgproc.rectangle(inputImage, rect.br(), rect.tl(), color);
-            //Imgproc.putText(inputImage, text, position, 3, 1, new Scalar(255, 255, 255, 255), 2);
             Imgproc.drawContours(inputImage, contours, maxAreaId, color, -1);
         }
         else {
