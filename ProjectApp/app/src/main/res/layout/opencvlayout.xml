@@ -13,25 +13,64 @@
         opencv:show_fps="true"
         opencv:camera_id="any" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/imageStatus"
-        android:layout_gravity="center"
-        android:textSize="40dp"
-        android:textColor="#ff0000" />
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/userNote"
-        android:layout_gravity="center_horizontal|top"
-        android:textColor="#ff0000"
-        android:textSize="25dp" />
+        <SurfaceView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/surfaceView"
+            android:layout_alignBottom="@+id/imageStatus"
+            android:layout_alignTop="@+id/imageStatus"
+            android:background="#000000"
+            android:alpha="0.5"
+            android:layout_alignLeft="@+id/imageStatus"
+            android:layout_alignStart="@+id/imageStatus"
+            android:layout_alignRight="@+id/imageStatus"
+            android:layout_alignEnd="@+id/imageStatus" />
+
+        <SurfaceView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/surfaceView2"
+            android:layout_alignBottom="@+id/userNote"
+            android:layout_alignTop="@+id/userNote"
+            android:layout_alignLeft="@+id/userNote"
+            android:layout_alignStart="@+id/userNote"
+            android:layout_alignRight="@+id/userNote"
+            android:layout_alignEnd="@+id/userNote"
+            android:alpha="0.5"
+            android:background="#000000"
+            android:focusable="false" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Large Text"
+            android:id="@+id/imageStatus"
+            android:layout_gravity="center"
+            android:textSize="40dp"
+            android:textColor="#ffffff"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Medium Text"
+            android:id="@+id/userNote"
+            android:layout_gravity="center_horizontal|top"
+            android:textColor="#ffffff"
+            android:textSize="25dp"
+            android:layout_below="@+id/imageStatus"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" />
+
+    </RelativeLayout>
 
 
 </FrameLayout>

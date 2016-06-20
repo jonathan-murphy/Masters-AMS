@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.SurfaceView;
 import android.view.WindowManager;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.opencv.android.BaseLoaderCallback;
 import org.opencv.android.CameraBridgeViewBase;
@@ -44,6 +45,7 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
     double bandArea = 0;
     double bandAreaMax = 0;
     double bandAreaMin = 100000;
+    boolean bandPresent = false;
     boolean calibrated = false;
     boolean stretched = false;
     boolean analysing = false;
@@ -63,13 +65,14 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
     long runTime = 0;
     String userNote = "NOTE";
     String currentStatus = "CALIBRATING";
+    String toastMsg = "CALIBRATION FAILED";
     double fontScale = 2;
     int thickness = 2;
     Point position = new Point(100, 100);
 
     org.opencv.core.Size blurAmount = new Size(5,5);
-    Scalar lowerHue = new Scalar(0,100,100);
-    Scalar upperHue = new Scalar(35,255,255);
+    Scalar lowerHue = new Scalar(20,100,100);
+    Scalar upperHue = new Scalar(40,255,255);
     Scalar color = new Scalar(255, 255, 0);
     TextView status;
     TextView note;
@@ -103,56 +106,57 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
         }
     };
 
+    final Runnable errorRunnable = new Runnable() {
+        public void run() {
+            Toast.makeText(getApplicationContext(), toastMsg, Toast.LENGTH_LONG).show();
+        }
+    };
+
     public void initializeTimerTask() {
 
         timerTask = new TimerTask() {
             public void run() {
 
-                userNote = String.valueOf(bandArea);
+                if (bandAreaMax > 500) {
+                    userNote = String.valueOf(bandArea);
 
-                double bandAreaChange = (bandAreaMax / bandAreaMin) - 1;
-                if (bandAreaChange <= 0.05 && calibrated == false) {
-                    calibratedArea = ((bandAreaMax - bandAreaMin) / 2) + bandAreaMin; // set calibrated area to middle of max and min values
-                    calibrated = true;
-                }
-                else if (bandAreaMax > (calibratedArea * 1.5) && calibrated == true && analysing == false){
-                    stretched = true;
-                    analysing = true;
-                }
-                else if (bandAreaChange <= 0.075 && analysing == true){
-                    analysedArea = ((bandAreaMax - bandAreaMin) / 2) + bandAreaMin; // set analysed (i.e. stretched) area to middle of max and min values
-                    analysed = true;
-                }
+                    double bandAreaChange = (bandAreaMax / bandAreaMin) - 1;
+                    if (bandAreaChange <= 0.1 && calibrated == false) {
+                        calibratedArea = ((bandAreaMax - bandAreaMin) / 2) + bandAreaMin; // set calibrated area to middle of max and min values
+                        calibrated = true;
+                    } else if (bandAreaMax > (calibratedArea * 1.5) && calibrated == true && analysing == false) {
+                        stretched = true;
+                        analysing = true;
+                    } else if (bandAreaChange <= 0.15 && analysing == true) {
+                        analysedArea = ((bandAreaMax - bandAreaMin) / 2) + bandAreaMin; // set analysed (i.e. stretched) area to middle of max and min values
+                        analysed = true;
+                    }
 
-                if (calibrated == false){
-                    currentStatus = "CALIBRATING";
-                    userNote = String.valueOf(bandAreaChange);
-                    // reset band max & min values
-                    bandAreaMax = 0;
-                    bandAreaMin = 100000;
-                    statusHandler.post(statusRunnable);
-                    calibrationCycle++;
-                    if (calibrationCycle >=10){
+                    if (calibrated == false) {
+                        currentStatus = "CALIBRATING";
+                        userNote = "HOLD STILL";
+                        calibrationCycle++;
+                        if (calibrationCycle >= 10) {
+                            timer.cancel(); // turn off timer
+                            finish(); // close Activity
+                            statusHandler.post(errorRunnable);
+                        }
+                    } else if (stretched == false) {
+                        userNote = "PLEASE STRETCH BAND";
+                        currentStatus = "STRETCH";
+                    } else if (stretched == true && analysing == true && analysed == false) {
+                        currentStatus = "ANALYSING";
+                        userNote = "HOLD STILL";
+                    } else if (analysed == true) {
                         timer.cancel(); // turn off timer
                         finish(); // close Activity
                     }
                 }
-                else if (stretched == false){
-                    //stretched = true;
-                    //currentStatus = String.valueOf(calibratedArea);
-                    userNote = String.valueOf(bandAreaChange);
-                    currentStatus = "STRETCH";
-                    statusHandler.post(statusRunnable);
+                else {
+                    userNote = "BAND NOT FOUND";
                 }
-                else if (stretched == true && analysing == true && analysed == false){
-                    currentStatus = "ANALYSING";
-                    userNote = String.valueOf(bandAreaChange);
-                    statusHandler.post(statusRunnable);
-                }
-                else if (analysed == true) {
-                    timer.cancel(); // turn off timer
-                    finish(); // close Activity
-                }
+
+                statusHandler.post(statusRunnable);
 
                 // reset band max & min values
                 bandAreaMax = 0;
