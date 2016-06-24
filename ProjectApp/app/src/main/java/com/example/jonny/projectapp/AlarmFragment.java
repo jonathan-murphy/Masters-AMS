@@ -34,11 +34,20 @@ public class AlarmFragment extends Fragment {
                 container, false);
 
         Button setAlarmButton = (Button) view.findViewById(R.id.setAlarmButton);
+        Button connectSensorButton = (Button) view.findViewById(R.id.connectSensorButton);
 
         setAlarmButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), AlarmAddScreen.class);
+                startActivity(intent);
+            }
+        });
+
+        connectSensorButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), DeviceScanActivity.class);
                 startActivity(intent);
             }
         });

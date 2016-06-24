@@ -1,5 +1,9 @@
 [
     {
+        "merged": "C:\\Users\\Jonny\\Desktop\\Project\\Masters-AMS\\BluetoothLeGatt\\Application\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_launcher.png",
+        "source": "C:\\Users\\Jonny\\Desktop\\Project\\Masters-AMS\\BluetoothLeGatt\\Application\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
+    },
+    {
         "merged": "C:\\Users\\Jonny\\Desktop\\BluetoothLeGatt\\Application\\build\\intermediates\\res\\merged\\debug\\drawable-mdpi-v4\\ic_launcher.png",
         "source": "C:\\Users\\Jonny\\Desktop\\BluetoothLeGatt\\Application\\src\\main\\res\\drawable-mdpi\\ic_launcher.png"
     }

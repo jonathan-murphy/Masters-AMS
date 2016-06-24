@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.bluetoothlegatt;
+package com.example.jonny.projectapp;
 
 import java.util.HashMap;
 import java.util.UUID;
