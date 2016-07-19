@@ -164,18 +164,18 @@ public class AssessmentScreen extends ActionBarActivity {
         }
 // Do something else.
 //        File file = new File(exportDir, "assessment" + DateToStr + ".csv");
-//        try {
-//            file.createNewFile();
-//            CSVWriter writer = new CSVWriter(new FileWriter(file));
-//            writer.writeAll(mylist);
-//            writer.close();
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//        }
-//        TransferObserver observer = transferUtility.upload("initiraltestbucket", file.getName(),
-//                file);
-//        transferObserverListener(observer);
-//        Toast.makeText(getApplicationContext(), "Upload Complete", Toast.LENGTH_SHORT).show();
+        try {
+            file.createNewFile();
+            CSVWriter writer = new CSVWriter(new FileWriter(file));
+            writer.writeAll(mylist);
+            writer.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        TransferObserver observer = transferUtility.upload("initiraltestbucket", file.getName(),
+                file);
+        transferObserverListener(observer);
+        Toast.makeText(getApplicationContext(), "Upload Complete", Toast.LENGTH_SHORT).show();
     }
 
     public void transferObserverListener(TransferObserver transferObserver){

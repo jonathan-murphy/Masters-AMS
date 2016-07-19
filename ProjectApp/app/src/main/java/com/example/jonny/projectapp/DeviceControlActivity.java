@@ -96,11 +96,11 @@ public class DeviceControlActivity extends Activity {
                 mConnected = true;
                 Toast.makeText(getBaseContext(), "SLEEP SENSOR CONNECTED", Toast.LENGTH_SHORT);
                 //updateConnectionState(R.string.connected);
-                invalidateOptionsMenu();
+                //invalidateOptionsMenu();
             } else if (BluetoothLeService.ACTION_GATT_DISCONNECTED.equals(action)) {
                 mConnected = false;
                 //updateConnectionState(R.string.disconnected);
-                invalidateOptionsMenu();
+                //invalidateOptionsMenu();
                 //clearUI();
             } else if (BluetoothLeService.ACTION_GATT_SERVICES_DISCOVERED.equals(action)) {
                 // Show all the supported services and characteristics on the user interface.
@@ -120,6 +120,8 @@ public class DeviceControlActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sleep_screen);
+
+        Toast.makeText(this, "STARTED", Toast.LENGTH_SHORT).show();
 
         final Intent intent = getIntent();
         mDeviceName = intent.getStringExtra(EXTRAS_DEVICE_NAME);

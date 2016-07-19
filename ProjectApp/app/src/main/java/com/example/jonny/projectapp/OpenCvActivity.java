@@ -96,7 +96,7 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
         startTime = System.currentTimeMillis();
 
         initializeTimerTask();
-        timer.schedule(timerTask, 1000, 1000);
+        timer.schedule(timerTask, 1000, 500);
     }
 
     final Runnable statusRunnable = new Runnable() {
@@ -124,7 +124,7 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
                     if (bandAreaChange <= 0.1 && calibrated == false) {
                         calibratedArea = ((bandAreaMax - bandAreaMin) / 2) + bandAreaMin; // set calibrated area to middle of max and min values
                         calibrated = true;
-                    } else if (bandAreaMax > (calibratedArea * 1.5) && calibrated == true && analysing == false) {
+                    } else if (bandAreaMax > (calibratedArea * 1.3) && calibrated == true && analysing == false) {
                         stretched = true;
                         analysing = true;
                     } else if (bandAreaChange <= 0.15 && analysing == true) {
