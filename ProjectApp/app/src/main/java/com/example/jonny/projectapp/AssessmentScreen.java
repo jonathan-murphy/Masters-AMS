@@ -1,7 +1,9 @@
 package com.example.jonny.projectapp;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -31,6 +33,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class AssessmentScreen extends ActionBarActivity {
 
@@ -41,6 +44,17 @@ public class AssessmentScreen extends ActionBarActivity {
 
     String DateToStr;
     Button button;
+
+    String appval;
+    String fatval;
+    String illval;
+    String mooval;
+    String motval;
+    String nutval;
+    String recval;
+    String sleval;
+    String sorval;
+    String strval;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,16 +86,16 @@ public class AssessmentScreen extends ActionBarActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String appval = String.valueOf(appetite.getProgress());
-                String fatval = String.valueOf(fatigue.getProgress());
-                String illval = String.valueOf(illness.getProgress());
-                String mooval = String.valueOf(mood.getProgress());
-                String motval = String.valueOf(motivation.getProgress());
-                String nutval = String.valueOf(nutrition.getProgress());
-                String recval = String.valueOf(recovery.getProgress());
-                String sleval = String.valueOf(sleep.getProgress());
-                String sorval = String.valueOf(soreness.getProgress());
-                String strval = String.valueOf(stress.getProgress());
+                appval = String.valueOf(appetite.getProgress());
+                fatval = String.valueOf(fatigue.getProgress());
+                illval = String.valueOf(illness.getProgress());
+                mooval = String.valueOf(mood.getProgress());
+                motval = String.valueOf(motivation.getProgress());
+                nutval = String.valueOf(nutrition.getProgress());
+                recval = String.valueOf(recovery.getProgress());
+                sleval = String.valueOf(sleep.getProgress());
+                sorval = String.valueOf(soreness.getProgress());
+                strval = String.valueOf(stress.getProgress());
 
 //                mylist.add(new String[]{"Appetite",appval});
 //                mylist.add(new String[]{"Fatigue",fatval});
@@ -105,6 +119,8 @@ public class AssessmentScreen extends ActionBarActivity {
                 mylist.add(new String[]{sorval});
                 mylist.add(new String[]{strval});
                 save();
+
+                subjectiveUpdate();
             }
         });
     }
@@ -199,5 +215,48 @@ public class AssessmentScreen extends ActionBarActivity {
             }
 
         });
+    }
+
+    private void subjectiveUpdate(){
+
+        class nutritionUpdate extends AsyncTask<Void,Void,String> {
+
+            ProgressDialog loading;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                loading = ProgressDialog.show(AssessmentScreen.this,"Adding...","Wait...",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                loading.dismiss();
+                Toast.makeText(AssessmentScreen.this,s,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected String doInBackground(Void... v) {
+                HashMap<String,String> params = new HashMap<>();
+                params.put("Appetite",appval);
+                params.put("Fatigue",fatval);
+                params.put("Illness",illval);
+                params.put("Mood",mooval);
+                params.put("Motivation",motval);
+                params.put("Nutrition",nutval);
+                params.put("Recovery",recval);
+                params.put("Sleep",sleval);
+                params.put("Soreness",sorval);;
+                params.put("Stress",strval);
+
+                RequestHandler rh = new RequestHandler();
+                String res = rh.sendPostRequest("http://ec2-52-91-226-96.compute-1.amazonaws.com/SubjectiveUpdate.php", params);
+                return res;
+            }
+        }
+
+        nutritionUpdate nu = new nutritionUpdate();
+        nu.execute();
     }
 }
