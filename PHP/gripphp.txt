@@ -1,0 +1,33 @@
+<!DOCTYPE html> <html> <body> <?php include "../inc/dbinfo.inc"; ?>
+<html> <body> <h1>GRIP UPDATE</h1> <?php /* Connect to MySQL and select  the database. */ 
+$connection = mysqli_connect(DB_SERVER, DB_USERNAME,  DB_PASSWORD);  
+if (mysqli_connect_errno()) echo ":( Failed to connect to MySQL:  $DB_SERVER " .  mysqli_connect_error(); 
+else { echo "CONNECTED TO  DATABASE";} $database = mysqli_select_db($connection, DB_DATABASE); 
+/*  INSERT NEW DATA */ 
+if($_SERVER['REQUEST_METHOD']=='POST'){ 
+	$taps =  $_POST['taps']; 
+	$date = date("Y-m-d"); 
+	$grip = $_POST['grip']; 
+	$FT= $_POST['FT']; 
+	$CT = $_POST['CT'];
+	
+	$query = mysqli_query($connection, "SELECT * FROM `mydb`.`Test` WHERE `TestDate` > DATE_SUB(NOW(), INTERVAL 1 DAY)");
+
+if(mysqli_num_rows($query) > 0){
+    echo "Data already exists";
+	$sql = "UPDATE `mydb`.`Test` SET `Grip`='$grip' WHERE `TestDate` > DATE_SUB(NOW(), INTERVAL 1 DAY);"; 
+	if  (mysqli_query($connection, $sql)) {echo "SUCCESS";} 
+	else{echo "ERROR: update " .  $sql . "<br>" . mysqli_error($connection);}
+}else{
+    // do something
+    if (!mysqli_query($connection,$query))
+    {
+        echo "No data for today";
+		$sql = "INSERT INTO `mydb`.`Test`  (`UserIdTest`, `TestDate` , `Grip`) VALUES ('1',  '$date', '$grip');";
+		if  (mysqli_query($connection, $sql)) {echo "SUCCESS";}
+		else{echo "ERROR: insert " .  $sql . "<br>" . mysqli_error($connection);}
+    }
+}
+}
+	?>  </body> </html> 
+
