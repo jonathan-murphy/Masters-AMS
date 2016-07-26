@@ -1,5 +1,7 @@
 package com.example.jonny.projectapp;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
@@ -59,6 +61,7 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
     double calibVal = 0;
     double maxVal = 0;
     double increase = 0;
+    double gripValue = 0;
     int frameNo = 1;
     long time = 0;
     long startTime = 0;
@@ -130,6 +133,7 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
                     } else if (bandAreaChange <= 0.15 && analysing == true) {
                         analysedArea = ((bandAreaMax - bandAreaMin) / 2) + bandAreaMin; // set analysed (i.e. stretched) area to middle of max and min values
                         analysed = true;
+                        gripValue = analysedArea/calibratedArea;
                     }
 
                     if (calibrated == false) {
@@ -148,7 +152,12 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
                         currentStatus = "ANALYSING";
                         userNote = "HOLD STILL";
                     } else if (analysed == true) {
+                        //Toast.makeText(getApplicationContext(), "Increase" + gripValue, Toast.LENGTH_LONG).show();
+                        Log.i("sizechange", String.valueOf(gripValue));
                         timer.cancel(); // turn off timer
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra("grip",String.valueOf(gripValue));
+                        setResult(Activity.RESULT_OK,returnIntent);
                         finish(); // close Activity
                     }
                 }
@@ -240,9 +249,9 @@ public class OpenCvActivity extends AppCompatActivity implements CameraBridgeVie
             Imgproc.rectangle(inputImage, rect.br(), rect.tl(), color);
             Imgproc.drawContours(inputImage, contours, maxAreaId, color, -1);
         }
-        else {
-            Imgproc.putText(inputImage, "No band found", position, 3, 1, new Scalar(255, 255, 255, 255), 2);
-        }
+//        else {
+//            Imgproc.putText(inputImage, "No band found", position, 3, 1, new Scalar(255, 255, 255, 255), 2);
+//        }
 
         frameNo++;
         prevArea = maxArea;

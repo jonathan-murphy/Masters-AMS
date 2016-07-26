@@ -1,6 +1,9 @@
 package com.example.jonny.projectapp;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -21,10 +24,14 @@ import org.opencv.android.LoaderCallbackInterface;
 import org.opencv.android.OpenCVLoader;
 import org.opencv.core.Mat;
 
+import java.util.HashMap;
+
 /**
  * Created by Jonny on 20/02/2016.
  */
 public class GripFragment extends Fragment {
+
+    String grip;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,12 +44,25 @@ public class GripFragment extends Fragment {
         gripButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), OpenCvActivity.class);
-                startActivity(intent);
+                //Intent intent = new Intent(getActivity(), OpenCvActivity.class);
+                //startActivity(intent);
+                startActivityForResult(new Intent(getActivity(),OpenCvActivity.class), 1);
             }
         });
 
         return rootView;
+    }
+
+    // Called when the OPENCV activity finishes, calls the testUpdate()
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+                grip = data.getStringExtra("grip");
+                testUpdate();
+                Log.i("calling", "update");
+            }
+        }
     }
 
     public static GripFragment newInstance() {
@@ -52,6 +72,42 @@ public class GripFragment extends Fragment {
 
     public GripFragment() {
         // TODO Auto-generated constructor stub
+    }
+
+    private void testUpdate() {
+
+        class testUpdate extends AsyncTask<Void, Void, String> {
+
+            ProgressDialog loading;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //loading = ProgressDialog.show(getActivity.this,"Adding...","Wait...",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                //loading.dismiss();
+                //            Toast.makeText(Jum.this,s,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected String doInBackground(Void... v) {
+                HashMap<String, String> params = new HashMap<>();
+                //            params.put("Taps",taps);
+                params.put("grip",String.valueOf(grip));
+                //params.put("FT", String.valueOf(flightTime));
+                //params.put("CT", String.valueOf(contractionTime));
+
+                RequestHandler rh = new RequestHandler();
+                String res = rh.sendPostRequest("http://ec2-52-91-226-96.compute-1.amazonaws.com/GripUpdate.php", params);
+                return res;
+            }
+        }
+        testUpdate tu = new testUpdate();
+        tu.execute();
     }
 }
 

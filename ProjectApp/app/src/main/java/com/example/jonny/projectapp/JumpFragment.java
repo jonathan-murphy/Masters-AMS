@@ -1,12 +1,15 @@
 package com.example.jonny.projectapp;
 
+        import android.app.ProgressDialog;
         import android.content.Context;
+        import android.content.Intent;
         import android.hardware.Sensor;
         import android.hardware.SensorEvent;
         import android.hardware.SensorEventListener;
         import android.hardware.SensorManager;
         import android.media.AudioManager;
         import android.media.ToneGenerator;
+        import android.os.AsyncTask;
         import android.os.Bundle;
         import android.os.Environment;
         import android.os.Vibrator;
@@ -41,6 +44,7 @@ package com.example.jonny.projectapp;
         import java.util.ArrayList;
         import java.util.Arrays;
         import java.util.Date;
+        import java.util.HashMap;
         import java.util.Timer;
         import java.util.TimerTask;
 
@@ -159,6 +163,7 @@ public class JumpFragment extends Fragment implements SensorEventListener{
         mToneGenerator = new ToneGenerator(AudioManager.STREAM_MUSIC, 100);
         mSensorManager = (SensorManager) getActivity().getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        int i = 0;
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         if (mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null) {
             //Toast.makeText(getApplicationContext(),"Accelerometer Found",Toast.LENGTH_LONG).show();
@@ -230,14 +235,17 @@ public class JumpFragment extends Fragment implements SensorEventListener{
 
         if (i < samples && save == true) {
             dataFile.add(new String[] {Long.toString(time),Float.toString(rawX),Float.toString(rawY),Float.toString(rawZ),Float.toString(gForce)});
+            Log.i("counter", String.valueOf(i));
             mylist[i] = gForce;
             i = i+1;
         }
 
         if (i == samples && testComplete == false) {
+            onPause(); //unregistering listener
             v.vibrate(250);
             filter();
             analyseJump();
+            testUpdate();
             Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), "Test complete", Snackbar.LENGTH_INDEFINITE)
                     .setAction("SAVE", new View.OnClickListener() {
                         @Override
@@ -267,11 +275,13 @@ public class JumpFragment extends Fragment implements SensorEventListener{
 
         for (i = startSamples; i<samples-10; i++)
         {
+            Log.i("checking", String.valueOf(i));
             if (jumpStarted == false) {
                 if (filtered[i] >= eccentricThreshold || filtered[i] <= eccentricThreshold2) {
                     jumpStarted = true;
                     startTime = i;
                     Toast.makeText(getActivity().getApplicationContext(), "start " + i, Toast.LENGTH_SHORT).show();
+                    Log.i("start", String.valueOf(i));
                 }
             }
 
@@ -279,12 +289,14 @@ public class JumpFragment extends Fragment implements SensorEventListener{
                 landedTime = i;
                 landed = true;
                 Toast.makeText(getActivity().getApplicationContext(), "landed "+i, Toast.LENGTH_SHORT).show();
+                Log.i("landed", String.valueOf(i));
             }
 
             if (filtered[i] > filtered[i+1] + peakThreshold && filtered[i] > filtered[i-1] + peakThreshold && flightStarted == false && filtered[i+10] < filtered[i] * peakRolloff ){
                 flightStarted = true;
                 concentricTime = i;
                 Toast.makeText(getActivity().getApplicationContext(), "flight "+i, Toast.LENGTH_SHORT).show();
+                Log.i("flight", String.valueOf(i));
             }
         }
 
@@ -311,6 +323,12 @@ public class JumpFragment extends Fragment implements SensorEventListener{
         dataFile.add(new String[] {"Land",(Double.toString(landedTime))});
         dataFile.add(new String[] {"Contraction",(Double.toString(concentricTime))});
         dataFile.add(new String[] {"Threshold",(Double.toString(eccentricThreshold))});
+
+        // Send number of taps to activity so it can be uploaded with other test data
+//        Intent intent = new Intent(getActivity().getBaseContext(), TestScreen.class);
+//        intent.putExtra("FT", flightTime);
+//        intent.putExtra("CT", contractionTime);
+//        getActivity().startActivity(intent);
     }
 
     public void filter() {
@@ -344,6 +362,7 @@ public class JumpFragment extends Fragment implements SensorEventListener{
     @Override
     public void onResume() {
         super.onResume();
+        int i = 0; //reset counter value
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
     }
 
@@ -398,4 +417,41 @@ public class JumpFragment extends Fragment implements SensorEventListener{
 
         });
     }
+
+    private void testUpdate() {
+
+        class testUpdate extends AsyncTask<Void, Void, String> {
+
+            ProgressDialog loading;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //loading = ProgressDialog.show(getActivity.this,"Adding...","Wait...",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                //loading.dismiss();
+                //            Toast.makeText(Jum.this,s,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected String doInBackground(Void... v) {
+                HashMap<String, String> params = new HashMap<>();
+                //            params.put("Taps",taps);
+                //            params.put("Grip",grip);
+                params.put("FT", String.valueOf(flightTime));
+                params.put("CT", String.valueOf(contractionTime));
+
+                RequestHandler rh = new RequestHandler();
+                String res = rh.sendPostRequest("http://ec2-52-91-226-96.compute-1.amazonaws.com/JumpUpdate.php", params);
+                return res;
+            }
+        }
+        testUpdate tu = new testUpdate();
+        tu.execute();
+    }
 }
+

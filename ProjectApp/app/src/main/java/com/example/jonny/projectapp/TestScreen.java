@@ -1,5 +1,8 @@
 package com.example.jonny.projectapp;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -11,6 +14,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,6 +22,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.HashMap;
 
 public class TestScreen extends AppCompatActivity {
 
@@ -35,6 +42,10 @@ public class TestScreen extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+//    String taps = "";
+//    String grip = "";
+//    String FT = "";
+//    String CT = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +65,13 @@ public class TestScreen extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
+
+//        Intent intent = getIntent();
+//        taps = intent.getStringExtra("taps");
+//        grip = intent.getStringExtra("grip");
+//        CT = intent.getStringExtra("CT");
+//        FT = intent.getStringExtra("FT");
+
     }
 
 
@@ -128,7 +146,7 @@ public class TestScreen extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            switch (position){
+            switch (position) {
                 case 0:
                     return TapFragment.newInstance();
                 case 1:
@@ -158,5 +176,45 @@ public class TestScreen extends AppCompatActivity {
             }
             return null;
         }
+
+        private void testUpdate() {
+
+//            class nutritionUpdate extends AsyncTask<Void,Void,String> {
+//
+//                ProgressDialog loading;
+//
+//                @Override
+//                protected void onPreExecute() {
+//                    super.onPreExecute();
+//                    loading = ProgressDialog.show(TestScreen.this,"Adding...","Wait...",false,false);
+//                }
+//
+//                @Override
+//                protected void onPostExecute(String s) {
+//                    super.onPostExecute(s);
+//                    loading.dismiss();
+//                    Toast.makeText(TestScreen.this,s,Toast.LENGTH_LONG).show();
+//                }
+//
+//                @Override
+//                protected String doInBackground(Void... v) {
+//                    HashMap<String,String> params = new HashMap<>();
+//                    params.put("Taps",taps);
+//                    params.put("Grip",grip);
+//                    params.put("FT",FT);
+//                    params.put("CT",CT);
+//
+//                    RequestHandler rh = new RequestHandler();
+//                    String res = rh.sendPostRequest("http://ec2-52-91-226-96.compute-1.amazonaws.com/NutritionUpdate.php", params);
+//                    return res;
+//                }
+//            }
+//// SHOULD NOT BE COMMETED OUT ***********8
+////            testUpdate tu = new testUpdate();
+////            tu.execute();
+//        }
+
+        }
     }
 }
+

@@ -4,8 +4,10 @@ package com.example.jonny.projectapp;
  * Created by Jonny on 20/02/2016.
  */
 
+        import android.app.ProgressDialog;
         import android.content.DialogInterface;
         import android.content.Intent;
+        import android.os.AsyncTask;
         import android.os.Bundle;
         import android.os.CountDownTimer;
         import android.support.design.widget.Snackbar;
@@ -23,6 +25,7 @@ package com.example.jonny.projectapp;
 
         import org.w3c.dom.Text;
 
+        import java.util.HashMap;
         import java.util.Timer;
         import java.util.TimerTask;
         import java.util.logging.Handler;
@@ -57,6 +60,13 @@ public class TapFragment extends Fragment {
                 }
             });
             snackbar.show();
+            testUpdate();
+
+            // Send number of taps to activity so it can be uploaded with other test data
+//            Intent intent = new Intent(getActivity().getBaseContext(), TestScreen.class);
+//            intent.putExtra("taps", taps);
+//            getActivity().startActivity(intent);
+
         }
     };
 
@@ -117,6 +127,42 @@ public class TapFragment extends Fragment {
 
     public void onViewCreated(View view, Bundle savedInstanceState){
         //Snackbar snack = Snackbar.make(getActivity().findViewById(android.R.id.content), "No images.", Snackbar.LENGTH_LONG);
+    }
+
+    private void testUpdate() {
+
+        class testUpdate extends AsyncTask<Void, Void, String> {
+
+            ProgressDialog loading;
+
+            @Override
+            protected void onPreExecute() {
+                super.onPreExecute();
+                //loading = ProgressDialog.show(getActivity.this,"Adding...","Wait...",false,false);
+            }
+
+            @Override
+            protected void onPostExecute(String s) {
+                super.onPostExecute(s);
+                //loading.dismiss();
+                //            Toast.makeText(Jum.this,s,Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            protected String doInBackground(Void... v) {
+                HashMap<String, String> params = new HashMap<>();
+                params.put("taps",String.valueOf(taps));
+                //            params.put("grip",grip);
+                //params.put("FT", String.valueOf(flightTime));
+                //params.put("CT", String.valueOf(contractionTime));
+
+                RequestHandler rh = new RequestHandler();
+                String res = rh.sendPostRequest("http://ec2-52-91-226-96.compute-1.amazonaws.com/TapsUpdate.php", params);
+                return res;
+            }
+        }
+        testUpdate tu = new testUpdate();
+        tu.execute();
     }
 
 }
