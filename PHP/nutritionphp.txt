@@ -1,0 +1,29 @@
+<!DOCTYPE html> <html> <body> <?php include "../inc/dbinfo.inc"; ?> 
+<html> <body> <h1>NUTRITION UPDATE</h1> <?php 
+/* Connect to MySQL and select the database. */ 
+$connection = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD); 
+if (mysqli_connect_errno()) echo ":( Failed to connect to MySQL: $DB_SERVER " .  mysqli_connect_error(); 
+else { echo "CONNECTED TO DATABASE";} $database = mysqli_select_db($connection, DB_DATABASE); 
+/* INSERT NEW DATA */ 
+if($_SERVER['REQUEST_METHOD']=='POST'){       
+	$weight = $_POST['Weight'];        
+	$date = date("Y-m-d");        
+	$calories = $_POST['Calories'];        
+	$protein = $_POST['Protein'];        
+	$fat = $_POST['Fat'];       
+	$carbs = $_POST['Carbs'];               
+
+$query = mysqli_query($connection, "SELECT * FROM `mydb`.`Nutrition` WHERE `NutritionDate` > DATE_SUB(NOW(), INTERVAL 1 DAY)"); 
+if(mysqli_num_rows($query) > 0){echo "Data already exists";        
+$sql = "UPDATE `mydb`.`Nutrition` SET `Weight`='$weight',`Calories`='$calories',`Protein`='$protein',`Fat`='$fat',`Carbs`='$carbs' WHERE `NutritionDate` > DATE_SUB(NOW(), INTERVAL 1 DAY);";        
+if (mysqli_query($connection, $sql)) {echo "SUCCESS";}        
+else{echo "ERROR: update " .  $sql . "<br>" . mysqli_error($connection);}}
+else{    // do something    if (!mysqli_query($connection,$query))    
+{echo "No data for today"; 
+$sql = "INSERT INTO `mydb`.`Nutrition` (`UserIdNutrition`, `NutritionDate` , `Weight` ,`Calories`, `Protein`, `Fat`, `Carbs`) VALUES ('1', '$date', '$weight', '$calories', '$protein', '$fat', '$carbs');";                
+if (mysqli_query($connection, $sql)) {echo "SUCCESS";}                
+else{echo "ERROR: insert " .  $sql . "<br>" . mysqli_error($connection);}    }}}
+	?>  </body> </html>
+
+
+
