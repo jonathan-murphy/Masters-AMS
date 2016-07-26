@@ -20,4 +20,22 @@
         android:layout_alignParentStart="false"
         android:background="@android:color/transparent" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="CT:"
+        android:id="@+id/CT"
+        android:layout_below="@+id/start"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="FT:"
+        android:id="@+id/FT"
+        android:layout_below="@+id/CT"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
