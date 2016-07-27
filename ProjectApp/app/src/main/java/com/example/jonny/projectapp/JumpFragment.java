@@ -108,19 +108,19 @@ public class JumpFragment extends Fragment implements SensorEventListener{
     int flightTime;
 
     // filter coefficients //
-    float a1 = 1f;
-    float a2 = -1.7293f;
-    float a3 = 1.4461f;
-    float a4 = -0.5713f;
-    float a5 = 0.0917f;
-    float b1 = 0.0148f;
-    float b2 = 0.0593f;
-    float b3 = 0.089f;
-    float b4 = 0.0593f;
-    float b5 = 0.0148f;
+    float a0 = 1f;
+    float a1 = -1.7293f;
+    float a2 = 1.4461f;
+    float a3 = -0.5713f;
+    float a4 = 0.0917f;
+    float b0 = 0.0148f;
+    float b1 = 0.0593f;
+    float b2 = 0.089f;
+    float b3 = 0.0593f;
+    float b4 = 0.0148f;
 
-    double in1, in2, in3, in4, in5;
-    double filt1, filt2, filt3, filt4, filt5;
+    double in0, in1, in2, in3, in4;
+    double out0, out1, out2, out3, out4;
 
     boolean testComplete = false;
 
@@ -334,21 +334,22 @@ public class JumpFragment extends Fragment implements SensorEventListener{
     public void filter() {
 
         for (i = 1; i < samples; i++) {
-            in5 = in4;
             in4 = in3;
             in3 = in2;
             in2 = in1;
-            in1 = mylist[i];
+            in1 = in0;
+            in0 = mylist[i];
 
-            filt1 = filtered[i];
-            filt5 = filt4;
-            filt4 = filt3;
-            filt3 = filt2;
-            filt2 = filt1;
+            out0 = filtered[i];
+            out4 = out3;
+            out3 = out2;
+            out2 = out1;
+            out1 = out0;
 
             //filt1 = a1*in1  + a2*in2 + a3*in3 + a4*in4 + a5*in5 - b1*filt1  - b2*filt2 - b3*filt3 - b4*filt4 - b5*filt5;
-            filt1 = b1*in1  + b2*in2 + b3*in3 + b4*in4 + b5*in5 - a2*filt1 - a3*filt2 - a4*filt3 - a5*filt4;
-            filtered[i] = filt1;
+            //out0 = b0*in0  + b1*in1 + b2*in2 + b3*in3 + b4*in4 - a1*out0 - a2*out1 - a3*out2 - a4*out3;
+            out0 = b0*in0  + b1*in1 + b2*in2 + b3*in3 + b4*in4 - a1*out1 - a2*out2 - a3*out3 - a4*out4;
+            filtered[i] = out0;
             dataFile.add(new String[] {(Double.toString(filtered[i]))});
         }
 

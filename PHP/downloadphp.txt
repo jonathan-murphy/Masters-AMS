@@ -1,0 +1,44 @@
+<!DOCTYPE html> <html> <body> <?php include "../inc/dbinfo.inc"; ?>
+<html> <body> <h1>DOWNLOAD DATA</h1> <?php /* Connect to MySQL and select  the database. */ 
+$connection = mysqli_connect(DB_SERVER, DB_USERNAME,  DB_PASSWORD);  
+if (mysqli_connect_errno()) echo ":( Failed to connect to MySQL:  $DB_SERVER " .  mysqli_connect_error(); 
+else { echo "CONNECTED TO  DATABASE";} $database = mysqli_select_db($connection, DB_DATABASE); 
+/*  INSERT NEW DATA */
+
+$sql = "SELECT Appetite, Mood, Illness, Motivation, Nutrition, Soreness, Stress FROM `mydb`.`Subjective` LIMIT 28";
+
+mysqli_query($connection, $sql)
+
+$sql = "SELECT Taps, Grip, FT, CT FROM `mydb`.`Test` LIMIT 28";
+$sql = "SELECT Weight, Calories, Protein, Fat, Carbs FROM `mydb`.`Nutrition` LIMIT 28";
+ 
+if($_SERVER['REQUEST_METHOD']=='POST'){ 
+	$appetite =  $_POST['Appetite']; 
+	$date = date("Y-m-d"); 
+	$mood = $_POST['Mood']; 
+	$illness= $_POST['Illness']; 
+	$motivation = $_POST['Motivation'];
+	$nutrition = $_POST['Nutrition'];
+	$soreness = $_POST['Soreness'];
+	$stress = $_POST['Stress'];
+	
+	$query = mysqli_query($connection, "SELECT * FROM `mydb`.`Subjective` WHERE `SubjectiveDate` > DATE_SUB(NOW(), INTERVAL 1 DAY)");
+
+if(mysqli_num_rows($query) > 0){
+    echo "Data already exists";
+	$sql = "UPDATE `mydb`.`Subjective` SET `appetite`='$appetite', `mood`='$mood', `illness`='$illness', `motivation`='$motivation', `nutrition`='$nutrition', `soreness`='$soreness', `stress`='$stress' WHERE `SubjectiveDate` > DATE_SUB(NOW(), INTERVAL 1 DAY);"; 
+	if  (mysqli_query($connection, $sql)) {echo "SUCCESS";} 
+	else{echo "ERROR: update " .  $sql . "<br>" . mysqli_error($connection);}
+}else{
+    // do something
+    if (!mysqli_query($connection,$query))
+    {
+        echo "No data for today";
+		$sql = "INSERT INTO `mydb`.`Subjective`  (`UserIdSubjective`, `SubjectiveDate` , `appetite`, `mood`, `illness`, `motivation`, `nutrition`, `soreness`, `stress`) VALUES ('1',  '$date', '$appetite', '$mood', '$illness', '$motivation', '$nutrition', '$sorenes', '$stress');";
+		if  (mysqli_query($connection, $sql)) {echo "SUCCESS";}
+		else{echo "ERROR: insert " .  $sql . "<br>" . mysqli_error($connection);}
+    }
+}
+}
+	?>  </body> </html> 
+
