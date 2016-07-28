@@ -18,6 +18,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,6 +32,8 @@ public class HistoryFragment extends Fragment {
     int wellnessScore = 0;
     int  i = 0;
     int sum = 0;
+    double mean = 0;
+    double stdDev = 0;
 
     ArrayList<Integer> appetiteList = new ArrayList<>();
     ArrayList<Integer> moodList = new ArrayList<>();
@@ -118,9 +121,9 @@ public class HistoryFragment extends Fragment {
                 if (jsonObject.has("taps") && jsonObject.optString("taps") != null) {
                     tapsList.add(Integer.parseInt(jsonObject.optString("taps").toString()));
                 }
-                if (jsonObject.has("grip") && jsonObject.optString("grip") != null) {
-                    gripList.add(Integer.parseInt(jsonObject.optString("grip").toString()));
-                }
+//                if (jsonObject.has("grip") && jsonObject.optString("grip").toString() != null) {
+//                    gripList.add(Integer.parseInt(jsonObject.optString("grip").toString()));
+//                }
                 if (jsonObject.has("FT") && jsonObject.optString("FT") != null) {
                     FTList.add(Integer.parseInt(jsonObject.optString("FT").toString()));
                 }
@@ -161,10 +164,37 @@ public class HistoryFragment extends Fragment {
             Log.i("json", String.valueOf(fatList));
             Log.i("json", String.valueOf(carbsList));
 
+            double meanapp = calcMean(appetiteList);
+            double meanStdDev = calcStdDev(meanapp, appetiteList);
+            Log.i("mean", String.valueOf(meanapp));
+            Log.i("stdDev", String.valueOf(meanStdDev));
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
+
+    // CALCULATING MEAN OF ARRAY
+    public double calcMean(ArrayList<Integer> values) {
+        if(!values.isEmpty()) {
+            for (Integer value : values) {
+                mean += value;
+            }
+            return mean / values.size();
+        }
+        return mean;
+    }
+
+    // CALCULATING POPULATION STANDARD DEVIATION OF ARRAY
+    double calcStdDev(double mean, ArrayList<Integer> values)
+    {
+        double temp = 0;
+        for(double a :values)
+            temp += (mean-a)*(mean-a);
+        return stdDev = Math.sqrt(temp/(values.size()-1)); // returns population standard deviaton
+        //return stdDev = Math.sqrt(temp/(values.size()-1)); // returns standard deviation
+    }
+
 
     public void getJSON(View view)
     {
