@@ -33,6 +33,21 @@ public class HistoryFragment extends Fragment {
     int sum = 0;
 
     ArrayList<Integer> appetiteList = new ArrayList<>();
+    ArrayList<Integer> moodList = new ArrayList<>();
+    ArrayList<Integer> illnessList = new ArrayList<>();
+    ArrayList<Integer> motivationList = new ArrayList<>();
+    ArrayList<Integer> nutritionList = new ArrayList<>();
+    ArrayList<Integer> sorenessList = new ArrayList<>();
+    ArrayList<Integer> stressList = new ArrayList<>();
+    ArrayList<Integer> gripList = new ArrayList<>();
+    ArrayList<Integer> tapsList = new ArrayList<>();
+    ArrayList<Integer> FTList = new ArrayList<>();
+    ArrayList<Integer> CTList = new ArrayList<>();
+    ArrayList<Integer> weightList = new ArrayList<>();
+    ArrayList<Integer> caloriesList = new ArrayList<>();
+    ArrayList<Integer> proteinList = new ArrayList<>();
+    ArrayList<Integer> fatList = new ArrayList<>();
+    ArrayList<Integer> carbsList = new ArrayList<>();
 
 
     String JSON_string;
@@ -75,12 +90,76 @@ public class HistoryFragment extends Fragment {
                 //String name = jsonObject.optString("appetite").toString();
                 //appetiteList.add(jsonObject.optString("appetite").toInteger());
                 //sum = jsonObject.getInt("appetite");
-                if (jsonObject.optString("appetite") != null) {
-                    sum = Integer.parseInt(jsonObject.optString("appetite").toString());
+//                if (jsonObject.optString("appetite") != null) {
+//                    sum = Integer.parseInt(jsonObject.optString("appetite").toString());
+//                }
+                // Creating arraylist of each variable
+                if (jsonObject.has("appetite")) {
+                    appetiteList.add(Integer.parseInt(jsonObject.optString("appetite").toString()));
+                }
+                if (jsonObject.has("mood")) {
+                    moodList.add(Integer.parseInt(jsonObject.optString("mood").toString()));
+                }
+                if (jsonObject.has("illness")) {
+                    illnessList.add(Integer.parseInt(jsonObject.optString("illness").toString()));
+                }
+                if (jsonObject.has("motivation")) {
+                    motivationList.add(Integer.parseInt(jsonObject.optString("motivation").toString()));
+                }
+                if (jsonObject.has("nutrition")) {
+                    nutritionList.add(Integer.parseInt(jsonObject.optString("nutrition").toString()));
+                }
+                if (jsonObject.has("soreness")) {
+                    sorenessList.add(Integer.parseInt(jsonObject.optString("soreness").toString()));
+                }
+                if (jsonObject.has("stress")) {
+                    stressList.add(Integer.parseInt(jsonObject.optString("stress").toString()));
+                }
+                if (jsonObject.has("taps") && jsonObject.optString("taps") != null) {
+                    tapsList.add(Integer.parseInt(jsonObject.optString("taps").toString()));
+                }
+                if (jsonObject.has("grip") && jsonObject.optString("grip") != null) {
+                    gripList.add(Integer.parseInt(jsonObject.optString("grip").toString()));
+                }
+                if (jsonObject.has("FT") && jsonObject.optString("FT") != null) {
+                    FTList.add(Integer.parseInt(jsonObject.optString("FT").toString()));
+                }
+                if (jsonObject.has("CT") && jsonObject.optString("CT") != null) {
+                    CTList.add(Integer.parseInt(jsonObject.optString("CT").toString()));
+                }
+                if (jsonObject.has("weight")) {
+                    weightList.add(Integer.parseInt(jsonObject.optString("weight").toString()));
+                }
+                if (jsonObject.has("calories")) {
+                    caloriesList.add(Integer.parseInt(jsonObject.optString("calories").toString()));
+                }
+                if (jsonObject.has("protein")) {
+                    proteinList.add(Integer.parseInt(jsonObject.optString("protein").toString()));
+                }
+                if (jsonObject.has("fat")) {
+                    fatList.add(Integer.parseInt(jsonObject.optString("fat").toString()));
+                }
+                if (jsonObject.has("carbs")) {
+                    carbsList.add(Integer.parseInt(jsonObject.optString("carbs").toString()));
                 }
             }
 
-            Log.i("json", String.valueOf(sum));
+            Log.i("json", String.valueOf(appetiteList));
+            Log.i("json", String.valueOf(moodList));
+            Log.i("json", String.valueOf(illnessList));
+            Log.i("json", String.valueOf(motivationList));
+            Log.i("json", String.valueOf(nutritionList));
+            Log.i("json", String.valueOf(sorenessList));
+            Log.i("json", String.valueOf(stressList));
+            Log.i("json", String.valueOf(tapsList));
+            Log.i("json", String.valueOf(gripList));
+            Log.i("json", String.valueOf(FTList));
+            Log.i("json", String.valueOf(CTList));
+            Log.i("json", String.valueOf(weightList));
+            Log.i("json", String.valueOf(caloriesList));
+            Log.i("json", String.valueOf(proteinList));
+            Log.i("json", String.valueOf(fatList));
+            Log.i("json", String.valueOf(carbsList));
 
         } catch (JSONException e) {
             e.printStackTrace();

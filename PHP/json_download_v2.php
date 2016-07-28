@@ -1,5 +1,5 @@
-<?php include "../inc/dbinfo.inc"; ?>
 <?php
+include "../inc/dbinfo.inc"; 
 $connection = mysqli_connect(DB_SERVER, DB_USERNAME,  DB_PASSWORD);  
 $database = mysqli_select_db($connection, DB_DATABASE); 
 
@@ -19,7 +19,6 @@ $testResult = mysqli_query($connection, $sql1);
 
   while ($row = mysqli_fetch_array($testResult))
  {
-	 /*array_push($testData,array("taps"=>$row[0],"grip"=>$row[1],"FT"=>$row[2],"CT"=>$row[3]));*/
 	 array_push($userData,array("taps"=>$row[0],"grip"=>$row[1],"FT"=>$row[2],"CT"=>$row[3]));
  }
 
@@ -32,10 +31,7 @@ $nutritionResult = mysqli_query($connection, $sql2);
 	 array_push($userData,array("weight"=>$row[0],"calories"=>$row[1],"protein"=>$row[2],"fat"=>$row[3],"carbs"=>$row[4]));
  }
 
- echo json_encode(array("Subjective_data"=>$subjectiveData));
- /*echo json_encode(array("Test_data"=>$testData));
- echo json_encode(array("Nutrition_data"=>$nutritionData));*/
-
+ echo json_encode(array("user_data"=>$userData));
 ?>  
 
 
