@@ -1,5 +1,6 @@
 package com.example.jonny.projectapp;
 
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -30,6 +31,7 @@ import java.util.ArrayList;
 public class HistoryFragment extends Fragment {
 
     double samples = 0;
+    int flags = 0;
     int wellnessScore = 0;
     int  i = 0;
     int sum = 0;
@@ -38,91 +40,12 @@ public class HistoryFragment extends Fragment {
     double stdDev = 0;
     boolean flag = false;
 
-    double mAppetite = 0;
-    double sdAppetite = 0;
-    double mMood = 0;
-    double sdMood = 0;
-    double mIllness = 0;
-    double sdIllness = 0;
-    double mMotivation = 0;
-    double sdMotivation = 0;
-    double mNutrition = 0;
-    double sdNutrition = 0;
-    double mSoreness = 0;
-    double sdSoreness = 0;
-    double mStress = 0;
-    double sdStress = 0;
-    double mGrip = 0;
-    double sdGrip = 0;
-    double mTaps = 0;
-    double sdTaps = 0;
-    double mFT = 0;
-    double sdFT = 0;
-    double mCT = 0;
-    double sdCT = 0;
-    double mWeight = 0;
-    double sdWeight = 0;
-    double mCalories = 0;
-    double sdCalories = 0;
-    double mProtein = 0;
-    double sdProtein = 0;
-    double mFat = 0;
-    double sdFat = 0;
-    double mCarbs = 0;
-    double sdCarbs = 0;
-
-    boolean appetiteFLAG = false;
-    boolean moodFLAG = false;
-    boolean illnessFLAG = false;
-    boolean motivationFLAG = false;
-    boolean nutritionFLAG = false;
-    boolean sorenessFLAG = false;
-    boolean stressFLAG = false;
-    boolean testFLAG = false;
-    boolean weightFLAG = false;
-    boolean caloriesFLAG = false;
-
     String[] varNames = new String[] {"appetite", "mood", "illness", "motivation", "nutrition", "soreness", "stress", "taps", "grip", "FT", "CT", "weight", "calories", "protein", "fat", "carbs"};
+    Integer[] importance = new Integer[] {2,6,1,3,4,0,11,12,13,8,9,10,5,7,14,15}; // list most to least important ie 2 = illness. 6 = stress
     Double[][] varMeanStdDev  = new Double[varNames.length][2]; // 2d array to store mean and standard deviation values
     Boolean[][] varFlags = new Boolean[varNames.length][2]; // 2d array to store worse and better flags for values
     String[][] varRcmndtn = new String[varNames.length][2]; // 2d array to store recommendations for different flags
     Integer[][] userData = new Integer[varNames.length][28]; // creating 2d array to store all user data from json
-
-//    ArrayList<Integer> appetiteList = new ArrayList<>();
-//    ArrayList<Integer> moodList = new ArrayList<>();
-//    ArrayList<Integer> illnessList = new ArrayList<>();
-//    ArrayList<Integer> motivationList = new ArrayList<>();
-//    ArrayList<Integer> nutritionList = new ArrayList<>();
-//    ArrayList<Integer> sorenessList = new ArrayList<>();
-//    ArrayList<Integer> stressList = new ArrayList<>();
-//    ArrayList<Integer> gripList = new ArrayList<>();
-//    ArrayList<Integer> tapsList = new ArrayList<>();
-//    ArrayList<Integer> FTList = new ArrayList<>();
-//    ArrayList<Integer> CTList = new ArrayList<>();
-//    ArrayList<Integer> weightList = new ArrayList<>();
-//    ArrayList<Integer> caloriesList = new ArrayList<>();
-//    ArrayList<Integer> proteinList = new ArrayList<>();
-//    ArrayList<Integer> fatList = new ArrayList<>();
-//    ArrayList<Integer> carbsList = new ArrayList<>();
-
-    ArrayList<ArrayList<Integer>> allUserData = new ArrayList<ArrayList<Integer>>();
-
-    ArrayList<Integer> appetite = new ArrayList<>();
-    ArrayList<Integer> mood = new ArrayList<>();
-    ArrayList<Integer> illness = new ArrayList<>();
-    ArrayList<Integer> motivation = new ArrayList<>();
-    ArrayList<Integer> nutrition = new ArrayList<>();
-    ArrayList<Integer> soreness = new ArrayList<>();
-    ArrayList<Integer> stress = new ArrayList<>();
-    ArrayList<Integer> grip = new ArrayList<>();
-    ArrayList<Integer> taps = new ArrayList<>();
-    ArrayList<Integer> FT = new ArrayList<>();
-    ArrayList<Integer> CT = new ArrayList<>();
-    ArrayList<Integer> weight = new ArrayList<>();
-    ArrayList<Integer> calories = new ArrayList<>();
-    ArrayList<Integer> protein = new ArrayList<>();
-    ArrayList<Integer> fat = new ArrayList<>();
-    ArrayList<Integer> carbs = new ArrayList<>();
 
     String JSON_string;
     JSONArray json_array = new JSONArray();
@@ -140,6 +63,7 @@ public class HistoryFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRecommendation();
     }
 
     @Override
@@ -163,54 +87,6 @@ public class HistoryFragment extends Fragment {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                 // Creating arraylist of each variable
-//                if (jsonObject.has("appetite")) {
-//                    appetite.add(Integer.parseInt(jsonObject.optString("appetite").toString()));
-//                }
-//                if (jsonObject.has("mood")) {
-//                    mood.add(Integer.parseInt(jsonObject.optString("mood").toString()));
-//                }
-//                if (jsonObject.has("illness")) {
-//                    illness.add(Integer.parseInt(jsonObject.optString("illness").toString()));
-//                }
-//                if (jsonObject.has("motivation")) {
-//                    motivation.add(Integer.parseInt(jsonObject.optString("motivation").toString()));
-//                }
-//                if (jsonObject.has("nutrition")) {
-//                    nutrition.add(Integer.parseInt(jsonObject.optString("nutrition").toString()));
-//                }
-//                if (jsonObject.has("soreness")) {
-//                    soreness.add(Integer.parseInt(jsonObject.optString("soreness").toString()));
-//                }
-//                if (jsonObject.has("stress")) {
-//                    stress.add(Integer.parseInt(jsonObject.optString("stress").toString()));
-//                }
-//                if (jsonObject.has("taps") && jsonObject.optString("taps") != null) {
-//                    taps.add(Integer.parseInt(jsonObject.optString("taps").toString()));
-//                }
-////                if (jsonObject.has("grip") && jsonObject.optString("grip").toString() != null) {
-////                    gripList.add(Integer.parseInt(jsonObject.optString("grip").toString()));
-////                }
-//                if (jsonObject.has("FT") && jsonObject.optString("FT") != null) {
-//                    FT.add(Integer.parseInt(jsonObject.optString("FT").toString()));
-//                }
-//                if (jsonObject.has("CT") && jsonObject.optString("CT") != null) {
-//                    CT.add(Integer.parseInt(jsonObject.optString("CT").toString()));
-//                }
-//                if (jsonObject.has("weight")) {
-//                    weight.add(Integer.parseInt(jsonObject.optString("weight").toString()));
-//                }
-//                if (jsonObject.has("calories")) {
-//                    calories.add(Integer.parseInt(jsonObject.optString("calories").toString()));
-//                }
-//                if (jsonObject.has("protein")) {
-//                    protein.add(Integer.parseInt(jsonObject.optString("protein").toString()));
-//                }
-//                if (jsonObject.has("fat")) {
-//                    fat.add(Integer.parseInt(jsonObject.optString("fat").toString()));
-//                }
-//                if (jsonObject.has("carbs")) {
-//                    carbs.add(Integer.parseInt(jsonObject.optString("carbs").toString()));
-//                }
                 if (jsonObject.has("appetite")) {
                     userData[0][i] = Integer.parseInt(jsonObject.optString("appetite").toString());
                 }
@@ -261,47 +137,31 @@ public class HistoryFragment extends Fragment {
                 }
             }
 
-//            Log.i("json", String.valueOf(appetiteList));
-//            Log.i("json", String.valueOf(moodList));
-//            Log.i("json", String.valueOf(illnessList));
-//            Log.i("json", String.valueOf(motivationList));
-//            Log.i("json", String.valueOf(nutritionList));
-//            Log.i("json", String.valueOf(sorenessList));
-//            Log.i("json", String.valueOf(stressList));
-//            Log.i("json", String.valueOf(tapsList));
-//            Log.i("json", String.valueOf(gripList));
-//            Log.i("json", String.valueOf(FTList));
-//            Log.i("json", String.valueOf(CTList));
-//            Log.i("json", String.valueOf(weightList));
-//            Log.i("json", String.valueOf(caloriesList));
-//            Log.i("json", String.valueOf(proteinList));
-//            Log.i("json", String.valueOf(fatList));
-//            Log.i("json", String.valueOf(carbsList));
-
-//            String a = varNames[i];
-//
             for (i = 0; i < varNames.length; i++) {
                 varMeanStdDev[i][0]  = calcMean(i);
                 varMeanStdDev[i][1]  = calcStdDev(varMeanStdDev[i][0],i);
                 varFlags[i][0]  = checkWorse(varMeanStdDev[i][0],varMeanStdDev[i][1],i);
                 varFlags[i][1]  = checkBetter(varMeanStdDev[i][0],varMeanStdDev[i][1],i);
-                Log.i("worse", String.valueOf(varFlags[i][0]));
-                Log.i("better", String.valueOf(varFlags[i][1]));
             }
 
-            //double mean  = calcMean(0);
-
-            //Log.i("mean", String.valueOf(mean));
-
-//            mAppetite = calcMean(appetiteList);
-//            sdAppetite = calcStdDev(mAppetite, appetiteList);
-//            appetiteFLAG = checkWorse(mAppetite, sdAppetite, appetiteList);
-//            boolean appetiteFLAG2 = checkBetter(mAppetite, sdAppetite, appetiteList);
-
-//            Log.i("mean", String.valueOf(mAppetite));
-//            Log.i("stdDev", String.valueOf(sdAppetite));
-//            Log.i("worse", String.valueOf(appetiteFLAG));
-//            Log.i("better", String.valueOf(appetiteFLAG2));
+            // GIVE NOTICE OF TWO MOST IMPORTANT ISSUES
+            for (i = 0; i < varNames.length; i++) {
+                if (varFlags[importance[i]][0] == true) {
+                    //print statement
+                    Log.i("importance", String.valueOf(importance[i]));
+                    Log.i("worse", String.valueOf(varRcmndtn[importance[i]][0]));
+                    flags = flags + 1;
+                }
+                else if (varFlags[importance[i]][1] == true) {
+                    //print statement
+                    Log.i("importance", String.valueOf(importance[i]));
+                    Log.i("better", String.valueOf(varRcmndtn[importance[i]][1]));
+                    flags = flags + 1;
+                }
+                if (flags > 1) {
+                    break;
+                }
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -372,13 +232,53 @@ public class HistoryFragment extends Fragment {
                 currentVal = userData[i][samples - 1];
                 if (currentVal > mean + stdDev) {
                     flag = true;
+                    varRcmndtn[0][0] = "ads";
                 }
             }
         }
         return flag;
     }
 
-    
+    public void showRecommendation() {
+
+    }
+
+    public void setRecommendation() {
+        Resources res = getResources();
+
+        varRcmndtn[0][0] = String.format(res.getString(R.string.appetitie_worse));
+        varRcmndtn[0][1] = String.format(res.getString(R.string.appetitie_better));
+        varRcmndtn[1][0] = String.format(res.getString(R.string.mood_worse));
+        varRcmndtn[1][1] = String.format(res.getString(R.string.mood_better));
+        varRcmndtn[2][0] = String.format(res.getString(R.string.illness_worse));
+        varRcmndtn[2][1] = String.format(res.getString(R.string.illness_better));
+        varRcmndtn[3][0] = String.format(res.getString(R.string.motivation_worse));
+        varRcmndtn[3][1] = String.format(res.getString(R.string.motivation_better));
+        varRcmndtn[4][0] = String.format(res.getString(R.string.nutrition_worse));
+        varRcmndtn[4][1] = String.format(res.getString(R.string.nutrition_better));
+        varRcmndtn[5][0] = String.format(res.getString(R.string.soreness_worse));
+        varRcmndtn[5][1] = String.format(res.getString(R.string.soreness_better));
+        varRcmndtn[6][0] = String.format(res.getString(R.string.stress_worse));
+        varRcmndtn[6][1] = String.format(res.getString(R.string.stress_better));
+        varRcmndtn[7][0] = String.format(res.getString(R.string.taps_worse));
+        varRcmndtn[7][1] = String.format(res.getString(R.string.taps_better));
+        varRcmndtn[8][0] = String.format(res.getString(R.string.grip_worse));
+        varRcmndtn[8][1] = String.format(res.getString(R.string.grip_better));
+        varRcmndtn[9][0] = String.format(res.getString(R.string.ft_worse));
+        varRcmndtn[9][1] = String.format(res.getString(R.string.ft_better));
+        varRcmndtn[10][0] = String.format(res.getString(R.string.ct_worse));
+        varRcmndtn[10][1] = String.format(res.getString(R.string.ct_better));
+        varRcmndtn[11][0] = String.format(res.getString(R.string.weight_worse));
+        varRcmndtn[11][1] = String.format(res.getString(R.string.weight_better));
+        varRcmndtn[12][0] = String.format(res.getString(R.string.calories_worse));
+        varRcmndtn[12][1] = String.format(res.getString(R.string.calories_better));
+        varRcmndtn[13][0] = String.format(res.getString(R.string.protein_worse));
+        varRcmndtn[13][1] = String.format(res.getString(R.string.protein_better));
+        varRcmndtn[14][0] = String.format(res.getString(R.string.carbs_worse));
+        varRcmndtn[14][1] = String.format(res.getString(R.string.carbs_better));
+        varRcmndtn[15][0] = String.format(res.getString(R.string.fat_worse));
+        varRcmndtn[15][1] = String.format(res.getString(R.string.fat_better));
+    }
 
 
     public void getJSON(View view)

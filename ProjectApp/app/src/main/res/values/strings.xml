@@ -68,4 +68,38 @@
     <string name="menu_scan">Scan</string>
     <string name="menu_stop">Stop</string>
 
+    <!-- RECOMENDATIONS -->
+    <string name="appetitie_worse">appetitie_worse</string>
+    <string name="appetitie_better">appetitie_better</string>
+    <string name="mood_worse">mood_worse</string>
+    <string name="mood_better">mood_better</string>
+    <string name="illness_worse">illness_worse</string>
+    <string name="illness_better">illness_better</string>
+    <string name="motivation_worse">motivation_worse</string>
+    <string name="motivation_better">motivation_better</string>
+    <string name="nutrition_worse">nutrition_worse</string>
+    <string name="nutrition_better">nutrition_better</string>
+    <string name="soreness_worse">soreness_worse</string>
+    <string name="soreness_better">soreness_better</string>
+    <string name="stress_worse">stress_worse</string>
+    <string name="stress_better">stress_better</string>
+    <string name="taps_worse">taps_worse</string>
+    <string name="taps_better">taps_better</string>
+    <string name="grip_worse">grip_worse</string>
+    <string name="grip_better">grip_better</string>
+    <string name="ft_worse">ft_worse</string>
+    <string name="ft_better">ft_better</string>
+    <string name="ct_worse">ct_worse</string>
+    <string name="ct_better">ct_better</string>
+    <string name="weight_worse">weight_worse</string>
+    <string name="weight_better">weight_better</string>
+    <string name="calories_worse">calories_worse</string>
+    <string name="calories_better">calories_better</string>
+    <string name="protein_worse">protein_worse</string>
+    <string name="protein_better">protein_better</string>
+    <string name="carbs_worse">carbs_worse</string>
+    <string name="carbs_better">carbs_better</string>
+    <string name="fat_worse">fat_worse</string>
+    <string name="fat_better">fat_better</string>
+
 </resources>
