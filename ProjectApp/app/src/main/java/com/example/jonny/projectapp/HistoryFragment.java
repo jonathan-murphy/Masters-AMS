@@ -29,29 +29,100 @@ import java.util.ArrayList;
  */
 public class HistoryFragment extends Fragment {
 
+    double samples = 0;
     int wellnessScore = 0;
     int  i = 0;
     int sum = 0;
+    int currentVal = 0;
     double mean = 0;
     double stdDev = 0;
+    boolean flag = false;
 
-    ArrayList<Integer> appetiteList = new ArrayList<>();
-    ArrayList<Integer> moodList = new ArrayList<>();
-    ArrayList<Integer> illnessList = new ArrayList<>();
-    ArrayList<Integer> motivationList = new ArrayList<>();
-    ArrayList<Integer> nutritionList = new ArrayList<>();
-    ArrayList<Integer> sorenessList = new ArrayList<>();
-    ArrayList<Integer> stressList = new ArrayList<>();
-    ArrayList<Integer> gripList = new ArrayList<>();
-    ArrayList<Integer> tapsList = new ArrayList<>();
-    ArrayList<Integer> FTList = new ArrayList<>();
-    ArrayList<Integer> CTList = new ArrayList<>();
-    ArrayList<Integer> weightList = new ArrayList<>();
-    ArrayList<Integer> caloriesList = new ArrayList<>();
-    ArrayList<Integer> proteinList = new ArrayList<>();
-    ArrayList<Integer> fatList = new ArrayList<>();
-    ArrayList<Integer> carbsList = new ArrayList<>();
+    double mAppetite = 0;
+    double sdAppetite = 0;
+    double mMood = 0;
+    double sdMood = 0;
+    double mIllness = 0;
+    double sdIllness = 0;
+    double mMotivation = 0;
+    double sdMotivation = 0;
+    double mNutrition = 0;
+    double sdNutrition = 0;
+    double mSoreness = 0;
+    double sdSoreness = 0;
+    double mStress = 0;
+    double sdStress = 0;
+    double mGrip = 0;
+    double sdGrip = 0;
+    double mTaps = 0;
+    double sdTaps = 0;
+    double mFT = 0;
+    double sdFT = 0;
+    double mCT = 0;
+    double sdCT = 0;
+    double mWeight = 0;
+    double sdWeight = 0;
+    double mCalories = 0;
+    double sdCalories = 0;
+    double mProtein = 0;
+    double sdProtein = 0;
+    double mFat = 0;
+    double sdFat = 0;
+    double mCarbs = 0;
+    double sdCarbs = 0;
 
+    boolean appetiteFLAG = false;
+    boolean moodFLAG = false;
+    boolean illnessFLAG = false;
+    boolean motivationFLAG = false;
+    boolean nutritionFLAG = false;
+    boolean sorenessFLAG = false;
+    boolean stressFLAG = false;
+    boolean testFLAG = false;
+    boolean weightFLAG = false;
+    boolean caloriesFLAG = false;
+
+    String[] varNames = new String[] {"appetite", "mood", "illness", "motivation", "nutrition", "soreness", "stress", "taps", "grip", "FT", "CT", "weight", "calories", "protein", "fat", "carbs"};
+    Double[][] varMeanStdDev  = new Double[varNames.length][2]; // 2d array to store mean and standard deviation values
+    Boolean[][] varFlags = new Boolean[varNames.length][2]; // 2d array to store worse and better flags for values
+    String[][] varRcmndtn = new String[varNames.length][2]; // 2d array to store recommendations for different flags
+    Integer[][] userData = new Integer[varNames.length][28]; // creating 2d array to store all user data from json
+
+//    ArrayList<Integer> appetiteList = new ArrayList<>();
+//    ArrayList<Integer> moodList = new ArrayList<>();
+//    ArrayList<Integer> illnessList = new ArrayList<>();
+//    ArrayList<Integer> motivationList = new ArrayList<>();
+//    ArrayList<Integer> nutritionList = new ArrayList<>();
+//    ArrayList<Integer> sorenessList = new ArrayList<>();
+//    ArrayList<Integer> stressList = new ArrayList<>();
+//    ArrayList<Integer> gripList = new ArrayList<>();
+//    ArrayList<Integer> tapsList = new ArrayList<>();
+//    ArrayList<Integer> FTList = new ArrayList<>();
+//    ArrayList<Integer> CTList = new ArrayList<>();
+//    ArrayList<Integer> weightList = new ArrayList<>();
+//    ArrayList<Integer> caloriesList = new ArrayList<>();
+//    ArrayList<Integer> proteinList = new ArrayList<>();
+//    ArrayList<Integer> fatList = new ArrayList<>();
+//    ArrayList<Integer> carbsList = new ArrayList<>();
+
+    ArrayList<ArrayList<Integer>> allUserData = new ArrayList<ArrayList<Integer>>();
+
+    ArrayList<Integer> appetite = new ArrayList<>();
+    ArrayList<Integer> mood = new ArrayList<>();
+    ArrayList<Integer> illness = new ArrayList<>();
+    ArrayList<Integer> motivation = new ArrayList<>();
+    ArrayList<Integer> nutrition = new ArrayList<>();
+    ArrayList<Integer> soreness = new ArrayList<>();
+    ArrayList<Integer> stress = new ArrayList<>();
+    ArrayList<Integer> grip = new ArrayList<>();
+    ArrayList<Integer> taps = new ArrayList<>();
+    ArrayList<Integer> FT = new ArrayList<>();
+    ArrayList<Integer> CT = new ArrayList<>();
+    ArrayList<Integer> weight = new ArrayList<>();
+    ArrayList<Integer> calories = new ArrayList<>();
+    ArrayList<Integer> protein = new ArrayList<>();
+    ArrayList<Integer> fat = new ArrayList<>();
+    ArrayList<Integer> carbs = new ArrayList<>();
 
     String JSON_string;
     JSONArray json_array = new JSONArray();
@@ -90,84 +161,147 @@ public class HistoryFragment extends Fragment {
 
             for (i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
-                //String name = jsonObject.optString("appetite").toString();
-                //appetiteList.add(jsonObject.optString("appetite").toInteger());
-                //sum = jsonObject.getInt("appetite");
-//                if (jsonObject.optString("appetite") != null) {
-//                    sum = Integer.parseInt(jsonObject.optString("appetite").toString());
-//                }
+
                 // Creating arraylist of each variable
+//                if (jsonObject.has("appetite")) {
+//                    appetite.add(Integer.parseInt(jsonObject.optString("appetite").toString()));
+//                }
+//                if (jsonObject.has("mood")) {
+//                    mood.add(Integer.parseInt(jsonObject.optString("mood").toString()));
+//                }
+//                if (jsonObject.has("illness")) {
+//                    illness.add(Integer.parseInt(jsonObject.optString("illness").toString()));
+//                }
+//                if (jsonObject.has("motivation")) {
+//                    motivation.add(Integer.parseInt(jsonObject.optString("motivation").toString()));
+//                }
+//                if (jsonObject.has("nutrition")) {
+//                    nutrition.add(Integer.parseInt(jsonObject.optString("nutrition").toString()));
+//                }
+//                if (jsonObject.has("soreness")) {
+//                    soreness.add(Integer.parseInt(jsonObject.optString("soreness").toString()));
+//                }
+//                if (jsonObject.has("stress")) {
+//                    stress.add(Integer.parseInt(jsonObject.optString("stress").toString()));
+//                }
+//                if (jsonObject.has("taps") && jsonObject.optString("taps") != null) {
+//                    taps.add(Integer.parseInt(jsonObject.optString("taps").toString()));
+//                }
+////                if (jsonObject.has("grip") && jsonObject.optString("grip").toString() != null) {
+////                    gripList.add(Integer.parseInt(jsonObject.optString("grip").toString()));
+////                }
+//                if (jsonObject.has("FT") && jsonObject.optString("FT") != null) {
+//                    FT.add(Integer.parseInt(jsonObject.optString("FT").toString()));
+//                }
+//                if (jsonObject.has("CT") && jsonObject.optString("CT") != null) {
+//                    CT.add(Integer.parseInt(jsonObject.optString("CT").toString()));
+//                }
+//                if (jsonObject.has("weight")) {
+//                    weight.add(Integer.parseInt(jsonObject.optString("weight").toString()));
+//                }
+//                if (jsonObject.has("calories")) {
+//                    calories.add(Integer.parseInt(jsonObject.optString("calories").toString()));
+//                }
+//                if (jsonObject.has("protein")) {
+//                    protein.add(Integer.parseInt(jsonObject.optString("protein").toString()));
+//                }
+//                if (jsonObject.has("fat")) {
+//                    fat.add(Integer.parseInt(jsonObject.optString("fat").toString()));
+//                }
+//                if (jsonObject.has("carbs")) {
+//                    carbs.add(Integer.parseInt(jsonObject.optString("carbs").toString()));
+//                }
                 if (jsonObject.has("appetite")) {
-                    appetiteList.add(Integer.parseInt(jsonObject.optString("appetite").toString()));
+                    userData[0][i] = Integer.parseInt(jsonObject.optString("appetite").toString());
                 }
                 if (jsonObject.has("mood")) {
-                    moodList.add(Integer.parseInt(jsonObject.optString("mood").toString()));
+                    userData[1][i] = Integer.parseInt(jsonObject.optString("mood").toString());
                 }
                 if (jsonObject.has("illness")) {
-                    illnessList.add(Integer.parseInt(jsonObject.optString("illness").toString()));
+                    userData[2][i] = Integer.parseInt(jsonObject.optString("illness").toString());
                 }
                 if (jsonObject.has("motivation")) {
-                    motivationList.add(Integer.parseInt(jsonObject.optString("motivation").toString()));
+                    userData[3][i] = Integer.parseInt(jsonObject.optString("motivation").toString());
                 }
                 if (jsonObject.has("nutrition")) {
-                    nutritionList.add(Integer.parseInt(jsonObject.optString("nutrition").toString()));
+                    userData[4][i] = Integer.parseInt(jsonObject.optString("nutrition").toString());
                 }
                 if (jsonObject.has("soreness")) {
-                    sorenessList.add(Integer.parseInt(jsonObject.optString("soreness").toString()));
+                    userData[5][i] = Integer.parseInt(jsonObject.optString("soreness").toString());
                 }
                 if (jsonObject.has("stress")) {
-                    stressList.add(Integer.parseInt(jsonObject.optString("stress").toString()));
+                    userData[6][i] = Integer.parseInt(jsonObject.optString("stress").toString());
                 }
                 if (jsonObject.has("taps") && jsonObject.optString("taps") != null) {
-                    tapsList.add(Integer.parseInt(jsonObject.optString("taps").toString()));
+                    userData[7][i] = Integer.parseInt(jsonObject.optString("taps").toString());
                 }
 //                if (jsonObject.has("grip") && jsonObject.optString("grip").toString() != null) {
-//                    gripList.add(Integer.parseInt(jsonObject.optString("grip").toString()));
+//                    userData[8][i] = Integer.parseInt(jsonObject.optString("grip").toString());
 //                }
                 if (jsonObject.has("FT") && jsonObject.optString("FT") != null) {
-                    FTList.add(Integer.parseInt(jsonObject.optString("FT").toString()));
+                    userData[9][i] = Integer.parseInt(jsonObject.optString("FT").toString());
                 }
                 if (jsonObject.has("CT") && jsonObject.optString("CT") != null) {
-                    CTList.add(Integer.parseInt(jsonObject.optString("CT").toString()));
+                    userData[10][i] = Integer.parseInt(jsonObject.optString("CT").toString());
                 }
                 if (jsonObject.has("weight")) {
-                    weightList.add(Integer.parseInt(jsonObject.optString("weight").toString()));
+                    userData[11][i] = Integer.parseInt(jsonObject.optString("weight").toString());
                 }
                 if (jsonObject.has("calories")) {
-                    caloriesList.add(Integer.parseInt(jsonObject.optString("calories").toString()));
+                    userData[12][i] = Integer.parseInt(jsonObject.optString("calories").toString());
                 }
                 if (jsonObject.has("protein")) {
-                    proteinList.add(Integer.parseInt(jsonObject.optString("protein").toString()));
+                    userData[13][i] = Integer.parseInt(jsonObject.optString("protein").toString());
                 }
                 if (jsonObject.has("fat")) {
-                    fatList.add(Integer.parseInt(jsonObject.optString("fat").toString()));
+                    userData[14][i] = Integer.parseInt(jsonObject.optString("fat").toString());
                 }
                 if (jsonObject.has("carbs")) {
-                    carbsList.add(Integer.parseInt(jsonObject.optString("carbs").toString()));
+                    userData[15][i] = Integer.parseInt(jsonObject.optString("carbs").toString());
                 }
             }
 
-            Log.i("json", String.valueOf(appetiteList));
-            Log.i("json", String.valueOf(moodList));
-            Log.i("json", String.valueOf(illnessList));
-            Log.i("json", String.valueOf(motivationList));
-            Log.i("json", String.valueOf(nutritionList));
-            Log.i("json", String.valueOf(sorenessList));
-            Log.i("json", String.valueOf(stressList));
-            Log.i("json", String.valueOf(tapsList));
-            Log.i("json", String.valueOf(gripList));
-            Log.i("json", String.valueOf(FTList));
-            Log.i("json", String.valueOf(CTList));
-            Log.i("json", String.valueOf(weightList));
-            Log.i("json", String.valueOf(caloriesList));
-            Log.i("json", String.valueOf(proteinList));
-            Log.i("json", String.valueOf(fatList));
-            Log.i("json", String.valueOf(carbsList));
+//            Log.i("json", String.valueOf(appetiteList));
+//            Log.i("json", String.valueOf(moodList));
+//            Log.i("json", String.valueOf(illnessList));
+//            Log.i("json", String.valueOf(motivationList));
+//            Log.i("json", String.valueOf(nutritionList));
+//            Log.i("json", String.valueOf(sorenessList));
+//            Log.i("json", String.valueOf(stressList));
+//            Log.i("json", String.valueOf(tapsList));
+//            Log.i("json", String.valueOf(gripList));
+//            Log.i("json", String.valueOf(FTList));
+//            Log.i("json", String.valueOf(CTList));
+//            Log.i("json", String.valueOf(weightList));
+//            Log.i("json", String.valueOf(caloriesList));
+//            Log.i("json", String.valueOf(proteinList));
+//            Log.i("json", String.valueOf(fatList));
+//            Log.i("json", String.valueOf(carbsList));
 
-            double meanapp = calcMean(appetiteList);
-            double meanStdDev = calcStdDev(meanapp, appetiteList);
-            Log.i("mean", String.valueOf(meanapp));
-            Log.i("stdDev", String.valueOf(meanStdDev));
+//            String a = varNames[i];
+//
+            for (i = 0; i < varNames.length; i++) {
+                varMeanStdDev[i][0]  = calcMean(i);
+                varMeanStdDev[i][1]  = calcStdDev(varMeanStdDev[i][0],i);
+                varFlags[i][0]  = checkWorse(varMeanStdDev[i][0],varMeanStdDev[i][1],i);
+                varFlags[i][1]  = checkBetter(varMeanStdDev[i][0],varMeanStdDev[i][1],i);
+                Log.i("worse", String.valueOf(varFlags[i][0]));
+                Log.i("better", String.valueOf(varFlags[i][1]));
+            }
+
+            //double mean  = calcMean(0);
+
+            //Log.i("mean", String.valueOf(mean));
+
+//            mAppetite = calcMean(appetiteList);
+//            sdAppetite = calcStdDev(mAppetite, appetiteList);
+//            appetiteFLAG = checkWorse(mAppetite, sdAppetite, appetiteList);
+//            boolean appetiteFLAG2 = checkBetter(mAppetite, sdAppetite, appetiteList);
+
+//            Log.i("mean", String.valueOf(mAppetite));
+//            Log.i("stdDev", String.valueOf(sdAppetite));
+//            Log.i("worse", String.valueOf(appetiteFLAG));
+//            Log.i("better", String.valueOf(appetiteFLAG2));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -175,25 +309,76 @@ public class HistoryFragment extends Fragment {
     }
 
     // CALCULATING MEAN OF ARRAY
-    public double calcMean(ArrayList<Integer> values) {
-        if(!values.isEmpty()) {
-            for (Integer value : values) {
-                mean += value;
+    public double calcMean(int i) {
+        mean = 0; // resetting mean value
+        samples = 0; // resetting samples value
+        for (int j = 0; j < 28; j++) {
+            if (userData[i][j] != null) {
+                mean = mean + userData[i][j];
+                samples = samples + 1.0; // counting non null values in array row
             }
-            return mean / values.size();
         }
-        return mean;
+        return mean / samples;
     }
 
     // CALCULATING POPULATION STANDARD DEVIATION OF ARRAY
-    double calcStdDev(double mean, ArrayList<Integer> values)
+    double calcStdDev(double mean, int i)
     {
         double temp = 0;
-        for(double a :values)
-            temp += (mean-a)*(mean-a);
-        return stdDev = Math.sqrt(temp/(values.size()-1)); // returns population standard deviaton
-        //return stdDev = Math.sqrt(temp/(values.size()-1)); // returns standard deviation
+        samples = 0; // resetting samples value
+        for (int j = 0; j < 28; j++) {
+            if (userData[i][j] != null) {
+                temp = temp +  (mean-userData[i][j])*(mean-userData[i][j]);
+                samples = samples + 1.0; // counting non null values in array row
+            }
+        }
+        //return stdDev = Math.sqrt(temp/values.size()); // returns population standard deviaton
+        return stdDev = Math.sqrt(temp/(samples-1)); // returns standard deviation
     }
+
+    // CHECKING WHETHER OR NOT A VARIABLE IS LOW
+    boolean checkWorse(double mean, double stdDev, int i) {
+        // comparing last value of arraylist to normal values of that arraylist
+        flag = false;
+        int samples = 0; // resetting samples value
+        for (int j = 0; j < 28; j++) {
+            if (userData[i][j] != null) {
+                samples = samples + 1; // counting non null values in array row
+            }
+        }
+        if (samples > 0) {
+            if (userData[i][samples - 1] != null) {
+                currentVal = userData[i][samples - 1];
+                if (currentVal < mean - stdDev) {
+                    flag = true;
+                }
+            }
+        }
+        return flag;
+    }
+
+    // CHECKING WHETHER OR NOT A VARIABLE IS LOW
+    boolean checkBetter(double mean, double stdDev, int i) {
+        // comparing last value of arraylist to normal values of that arraylist
+        flag = false;
+        int samples = 0; // resetting samples value
+        for (int j = 0; j < 28; j++) {
+            if (userData[i][j] != null) {
+                samples = samples + 1; // counting non null values in array row
+            }
+        }
+        if (samples > 0) {
+            if (userData[i][samples - 1] != null) {
+                currentVal = userData[i][samples - 1];
+                if (currentVal > mean + stdDev) {
+                    flag = true;
+                }
+            }
+        }
+        return flag;
+    }
+
+    
 
 
     public void getJSON(View view)
